@@ -14,14 +14,11 @@ function page() {
   };
 
   const deleteEmail = async (mongoId) => {
-    const res = await axios.delete(
-      "https://nahirnyak-books-next-app.vercel.app/api/email",
-      {
-        params: {
-          id: mongoId,
-        },
-      }
-    );
+    const res = await axios.delete("/api/email", {
+      params: {
+        id: mongoId,
+      },
+    });
     if (res.data.success) {
       toast.success(res.data.message);
       fetchEmails();

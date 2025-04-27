@@ -35,10 +35,7 @@ function page() {
     formData.append("author", data.author);
     formData.append("authorImg", data.authorImg);
     formData.append("image", image);
-    const res = await axios.post(
-      `https://nahirnyak-books-next-app.vercel.app/api/blog`,
-      formData
-    );
+    const res = await axios.post(`/api/blog`, formData);
     if (res.data.success) {
       toast.success(res.data.message);
       console.log(data);

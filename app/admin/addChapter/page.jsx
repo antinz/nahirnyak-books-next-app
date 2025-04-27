@@ -31,17 +31,14 @@ function page() {
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     const selectedBlog = blogTitles.find((blog) => blog._id === data.blogId);
-    const res = await axios.post(
-      `https://nahirnyak-books-next-app.vercel.app/api/blog/chapter`,
-      {
-        blogId: data.blogId,
-        blogTitle: selectedBlog?.title || "",
-        title: data.title,
-        content: data.content,
-        chapterNumber: Number(data.chapterNumber),
-        footnotes: footnotes,
-      }
-    );
+    const res = await axios.post(`/api/blog/chapter`, {
+      blogId: data.blogId,
+      blogTitle: selectedBlog?.title || "",
+      title: data.title,
+      content: data.content,
+      chapterNumber: Number(data.chapterNumber),
+      footnotes: footnotes,
+    });
 
     if (res.data.success) {
       toast.success("Глава успешно добавлена");

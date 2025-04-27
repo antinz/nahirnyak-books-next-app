@@ -26,15 +26,12 @@ function Page({ params }) {
 
   const fetchChapters = async () => {
     try {
-      const res = await axios.get(
-        "https://nahirnyak-books-next-app.vercel.app/api/blog/chapter",
-        {
-          params: {
-            id: unwrappedParams.id,
-            chapterId: unwrappedParams.chapterId,
-          },
-        }
-      );
+      const res = await axios.get("/api/blog/chapter", {
+        params: {
+          id: unwrappedParams.id,
+          chapterId: unwrappedParams.chapterId,
+        },
+      });
       setChapterData(res.data);
     } catch (err) {
       console.error("Failed to load chapter", err);
