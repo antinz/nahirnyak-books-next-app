@@ -14,11 +14,14 @@ function page() {
   };
 
   const deleteBlog = async (mongoId) => {
-    const res = await axios.delete("/api/blog", {
-      params: {
-        id: mongoId,
-      },
-    });
+    const res = await axios.delete(
+      "https://nahirnyak-books-next-app.vercel.app/api/blog",
+      {
+        params: {
+          id: mongoId,
+        },
+      }
+    );
     toast.success(res.data.message);
     fetchBlogs();
   };
