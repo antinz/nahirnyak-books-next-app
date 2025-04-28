@@ -9,7 +9,7 @@ export default function Home() {
     <div className="min-h-screen flex flex-col">
       <ToastContainer theme="dark" />
       <Header />
-      <main>
+      <main className="flex-grow">
         <BlogList />
       </main>
       <Footer />

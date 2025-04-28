@@ -1,68 +1,111 @@
 import { ConnectDB } from "/lib/config/db.js";
 import BlogModel from "/lib/config/models/BlogModel.js";
-import { writeFile } from "fs/promises";
-const fs = require("fs");
+import { v2 as cloudinary } from "cloudinary";
+import { NextResponse } from "next/server";
 
-const { NextResponse } = require("next/server");
+// Initialize DB connection
 const LoadDB = async () => {
   await ConnectDB();
 };
-
 LoadDB();
 
-// API Endpoint to get all blogs
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_NAME,
+  api_key: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
+  api_secret: process.env.NEXT_PUBLIC_CLOUDINARY_API_SECRET,
+});
+
+// API Endpoint to get blogs
 export async function GET(request) {
   try {
-    const blogId = await request.nextUrl.searchParams.get("id");
+    const blogId = request.nextUrl.searchParams.get("id");
     if (blogId) {
       const blog = await BlogModel.findById(blogId);
       return NextResponse.json(blog);
     } else {
       const blogs = await BlogModel.find({});
       blogs.reverse();
-      return NextResponse.json({
-        success: true,
-        blogs,
-      });
+      return NextResponse.json({ success: true, blogs });
     }
   } catch (error) {
     console.error(error);
+    return NextResponse.json({ success: false, message: error.message });
   }
 }
 
-// API endpoint for uploading blogs
+// API endpoint to upload blog
 export async function POST(request) {
-  const formData = await request.formData();
-  const timestamp = Date.now();
-  const image = formData.get("image");
-  const imageByteData = await image.arrayBuffer();
-  const buffer = Buffer.from(imageByteData);
-  const path = `./public/${timestamp}_${image.name}`;
-  await writeFile(path, buffer);
-  const imgUrl = `/${timestamp}_${image.name}`;
+  try {
+    const formData = await request.formData();
+    const imageFile = formData.get("image");
 
-  const blogData = {
-    title: `${formData.get("title")}`,
-    subTitle: `${formData.get("subTitle")}`,
-    description: `${formData.get("description")}`,
-    content: `${formData.get("content")}`,
-    category: `${formData.get("category")}`,
-    author: `${formData.get("author")}`,
-    image: `${imgUrl}`,
-    authorImg: `${formData.get("authorImg")}`,
-  };
+    if (!imageFile) {
+      return NextResponse.json({
+        success: false,
+        message: "No image uploaded",
+      });
+    }
 
-  await BlogModel.create(blogData);
-  console.log("Blog Saved");
-  return NextResponse.json({ success: true, message: "Blog Added" });
+    const arrayBuffer = await imageFile.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
+    const uploadResult = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        { resource_type: "auto" },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
+      uploadStream.end(buffer);
+    });
+
+    const imgUrl = uploadResult.secure_url;
+    const publicId = uploadResult.public_id;
+
+    const blogData = {
+      title: formData.get("title"),
+      subTitle: formData.get("subTitle"),
+      description: formData.get("description"),
+      content: formData.get("content"),
+      category: formData.get("category"),
+      author: formData.get("author"),
+      authorImg: formData.get("authorImg"),
+      image: imgUrl,
+      imagePublicId: publicId,
+      date: Date.now(),
+    };
+
+    await BlogModel.create(blogData);
+
+    console.log("Blog Saved");
+    return NextResponse.json({ success: true, message: "Blog Added" });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ success: false, message: error.message });
+  }
 }
 
-//API endpoint to delete blog
-
+// API endpoint to delete blog
 export async function DELETE(request) {
-  const id = await request.nextUrl.searchParams.get("id");
-  const blog = await BlogModel.findById(id);
-  fs.unlink(`./public/${blog.image}`, () => {});
-  await BlogModel.findByIdAndDelete(id);
-  return NextResponse.json({ message: "Blog Deleted" });
+  try {
+    const id = request.nextUrl.searchParams.get("id");
+    const blog = await BlogModel.findById(id);
+
+    if (!blog) {
+      return NextResponse.json({ success: false, message: "Blog not found" });
+    }
+
+    // Delete image from Cloudinary
+    if (blog.imagePublicId) {
+      await cloudinary.uploader.destroy(blog.imagePublicId);
+    }
+
+    await BlogModel.findByIdAndDelete(id);
+    return NextResponse.json({ message: "Blog Deleted" });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ success: false, message: error.message });
+  }
 }
