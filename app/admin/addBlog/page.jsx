@@ -38,7 +38,6 @@ function page() {
     const res = await axios.post(`/api/blog`, formData);
     if (res.data.success) {
       toast.success(res.data.message);
-      console.log(data);
       setImage(false);
       setData({
         title: "",
@@ -50,7 +49,6 @@ function page() {
         authorImg: "/author_img.jpg",
       });
     } else {
-      console.log(res.data);
       toast.error(res.data.message);
     }
   };

@@ -12,8 +12,8 @@ LoadDB();
 // Configure Cloudinary
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_NAME,
-  api_key: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
-  api_secret: process.env.NEXT_PUBLIC_CLOUDINARY_API_SECRET,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 // API Endpoint to get blogs
@@ -62,7 +62,6 @@ export async function POST(request) {
     });
 
     const imgUrl = uploadResult.secure_url;
-    console.log(imgUrl);
     const publicId = uploadResult.public_id;
 
     const blogData = {
