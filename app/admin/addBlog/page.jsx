@@ -64,6 +64,7 @@ function page() {
             height={70}
             alt=""
             className="mt-4"
+            priority
           />
         </label>
         <input

@@ -88,6 +88,7 @@ function Page({ params }) {
           height={720}
           alt=""
           className="border-4 h-[550px] border-white"
+          priority
         />
         <div
           className="blog-description"

@@ -13,6 +13,7 @@ function BlogItem({ title, content, category, image, id }) {
           width={400}
           height={400}
           className="border-black border-b w-[400px] h-[230px]"
+          priority
         />
       </Link>
       <p className="ml-5 mt-5 px-1 inline-block bg-black text-white text-sm">
