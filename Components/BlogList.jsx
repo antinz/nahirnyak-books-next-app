@@ -36,7 +36,7 @@ function BlogList() {
       <div className="flex justify-center my-6 sm:hidden">
         <button
           onClick={() => setDropdownOpen(!dropdownOpen)}
-          className="bg-black text-white py-2 px-6 rounded-sm flex flex-col items-center justify-center"
+          className="bg-black text-white py-2 px-6 rounded-sm flex flex-col items-center justify-center w-48"
         >
           {menu}{" "}
           <Image

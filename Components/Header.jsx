@@ -55,7 +55,7 @@ function Header() {
         </p>
         <form
           onSubmit={onSubmitHandler}
-          className="flex justify-between max-w-[500px] scale-75 sm:scale-100 mx-auto mt-10 border border-black shadow-[_7px_7px_0px_#000000]"
+          className="flex justify-between max-w-[650px] sm:max-w-[500px]  scale-75 sm:scale-100 mx-auto mt-10 border border-black shadow-[_7px_7px_0px_#000000]"
         >
           <input
             onChange={(e) => setEmail(e.target.value)}
@@ -67,7 +67,7 @@ function Header() {
           <button
             disabled={isLoading}
             type="submit"
-            className="border-l border-black py-4 px-4 sm: px-8 active:bg-gray-600 active:text-white"
+            className="border-l border-black py-4 px-2 sm:px-8 active:bg-gray-600 active:text-white"
           >
             Подписаться
           </button>
