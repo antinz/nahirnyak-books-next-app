@@ -62,6 +62,7 @@ export async function POST(request) {
     });
 
     const imgUrl = uploadResult.secure_url; // Cloudinary URL
+    console.log(imgUrl);
     const publicId = uploadResult.public_id; // Cloudinary public ID
 
     const blogData = {
@@ -72,8 +73,8 @@ export async function POST(request) {
       category: formData.get("category"),
       author: formData.get("author"),
       authorImg: formData.get("authorImg"),
-      image: imgUrl, // Use Cloudinary URL here
-      imagePublicId: publicId, // Save the public ID for future deletion
+      image: imgUrl,
+      imagePublicId: publicId,
       date: Date.now(),
     };
 
