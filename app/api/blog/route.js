@@ -79,8 +79,10 @@ export async function POST(request) {
 
     await BlogModel.create(blogData);
 
-    console.log("Blog Saved");
-    return NextResponse.json({ success: true, message: "Blog Added" });
+    return NextResponse.json({
+      success: true,
+      message: "Книга успешно добавлена",
+    });
   } catch (error) {
     console.error(error);
     return NextResponse.json({ success: false, message: error.message });
