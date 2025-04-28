@@ -50,7 +50,8 @@ function page() {
         authorImg: "/author_img.jpg",
       });
     } else {
-      toast.error("Error");
+      console.log(res.data);
+      toast.error(res.data.message);
     }
   };
   return (

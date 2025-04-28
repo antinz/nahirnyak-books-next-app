@@ -61,9 +61,9 @@ export async function POST(request) {
       uploadStream.end(buffer);
     });
 
-    const imgUrl = uploadResult.secure_url; // Cloudinary URL
+    const imgUrl = uploadResult.secure_url;
     console.log(imgUrl);
-    const publicId = uploadResult.public_id; // Cloudinary public ID
+    const publicId = uploadResult.public_id;
 
     const blogData = {
       title: formData.get("title"),
