@@ -35,7 +35,7 @@ function Header() {
         <Image src={assets.logo} alt="logo" width={200} height={200} />
         <form
           onSubmit={onSubmitHandler}
-          className="flex flex-col sm:flex-row items-stretch sm:items-center max-w-[650px] border border-black shadow-[_7px_7px_0px_#000000] bg-white"
+          className="flex flex-col hidden sm:block sm:flex-row items-stretch sm:items-center max-w-[650px] border border-black shadow-[_7px_7px_0px_#000000] bg-white"
         >
           <input
             onChange={(e) => setEmail(e.target.value)}
@@ -54,14 +54,12 @@ function Header() {
         </form>
       </div>
 
-      {/* Main Title */}
       <div className="text-center my-8">
         <h1 className="text-2xl sm:text-4xl md:text-5xl font-medium leading-tight">
           Книги Михаила Нагирняка
         </h1>
         <p className="mt-6 sm:mt-10 max-w-[740px] mx-auto text-sm sm:text-base px-2">
-          На этом сайте вы сможете прочитать множество разобразных духовных
-          книг!
+          На этом сайте вы можете найти и прочитать христианские книги и статьи!
         </p>
       </div>
     </div>
