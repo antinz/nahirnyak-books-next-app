@@ -31,12 +31,10 @@ function BlogList() {
 
   return (
     <div className="px-4 sm:px-8">
-      {/* Mobile Dropdown Header */}
       <p className="text-base text-center mt-4 mb-2 sm:hidden font-semibold">
         Категории
       </p>
 
-      {/* Mobile Dropdown */}
       <div className="flex justify-center my-4 sm:hidden">
         <button
           onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -51,7 +49,6 @@ function BlogList() {
         </button>
       </div>
 
-      {/* Mobile Dropdown Options */}
       {dropdownOpen && (
         <div className="flex flex-col items-center gap-2 mb-6 sm:hidden">
           {categories.map((category) => (
@@ -71,7 +68,6 @@ function BlogList() {
         </div>
       )}
 
-      {/* Desktop Category Buttons */}
       <div className="hidden sm:flex justify-center flex-wrap gap-4 my-10">
         {categories.map((category) => (
           <button
@@ -86,8 +82,7 @@ function BlogList() {
         ))}
       </div>
 
-      {/* Blog List */}
-      <div className="flex flex-wrap justify-center gap-6 sm:gap-8 gap-y-10 mb-16">
+      <div className="flex flex-col sm:flex-row justify-center items-center gap-6 sm:gap-8 gap-y-10 mb-16">
         <LoadingSpinner loading={loading} />
         {!loading &&
           blogs
