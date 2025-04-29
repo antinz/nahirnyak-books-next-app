@@ -30,15 +30,19 @@ function BlogList() {
   ];
 
   return (
-    <div>
-      <p className="text-base text-center m-2 sm:hidden">Категории</p>
+    <div className="px-4 sm:px-8">
+      {/* Mobile Dropdown Header */}
+      <p className="text-base text-center mt-4 mb-2 sm:hidden font-semibold">
+        Категории
+      </p>
+
       {/* Mobile Dropdown */}
-      <div className="flex justify-center my-6 sm:hidden">
+      <div className="flex justify-center my-4 sm:hidden">
         <button
           onClick={() => setDropdownOpen(!dropdownOpen)}
-          className="bg-black text-white py-2 px-6 rounded-sm flex flex-col items-center justify-center w-48"
+          className="bg-black text-white py-2 px-4 rounded-sm flex items-center justify-between w-60"
         >
-          {menu}{" "}
+          <span>{menu}</span>
           <Image
             src={dropdownOpen ? assets.up_arrow : assets.down_arrow}
             alt=""
@@ -46,6 +50,8 @@ function BlogList() {
           />
         </button>
       </div>
+
+      {/* Mobile Dropdown Options */}
       {dropdownOpen && (
         <div className="flex flex-col items-center gap-2 mb-6 sm:hidden">
           {categories.map((category) => (
@@ -57,7 +63,7 @@ function BlogList() {
               }}
               className={`${
                 menu === category ? "bg-black text-white" : "bg-gray-100"
-              } py-1 px-4 rounded-sm w-48 text-center`}
+              } py-1 px-4 rounded-sm w-60 text-center`}
             >
               {category}
             </button>
@@ -65,14 +71,14 @@ function BlogList() {
         </div>
       )}
 
-      {/* Desktop Buttons */}
-      <div className="hidden sm:flex justify-center gap-4 my-10 p-2">
+      {/* Desktop Category Buttons */}
+      <div className="hidden sm:flex justify-center flex-wrap gap-4 my-10">
         {categories.map((category) => (
           <button
             key={category}
             onClick={() => setMenu(category)}
             className={`${
-              menu === category ? "bg-black text-white" : ""
+              menu === category ? "bg-black text-white" : "bg-gray-100"
             } py-1 px-4 rounded-sm`}
           >
             {category}
@@ -80,8 +86,8 @@ function BlogList() {
         ))}
       </div>
 
-      {/* Blogs */}
-      <div className="flex flex-wrap justify-center gap-5 gap-y-10 mb-16 xl:mx-24">
+      {/* Blog List */}
+      <div className="flex flex-wrap justify-center gap-6 sm:gap-8 gap-y-10 mb-16">
         <LoadingSpinner loading={loading} />
         {!loading &&
           blogs
@@ -95,6 +101,7 @@ function BlogList() {
                 description={item.description}
                 content={item.content}
                 category={item.category}
+                pdfUrl={item.pdfUrl}
               />
             ))}
       </div>

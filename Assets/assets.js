@@ -10,6 +10,8 @@ import email_icon from "./email_icon.png";
 import upload_area from "./upload_area.png";
 import down_arrow from "./down_arrow.png";
 import up_arrow from "./up_arrow.png";
+import download from "./download.png";
+import white_arrow from "./white_arrow.png";
 
 export const assets = {
   profile_icon,
@@ -24,4 +26,6 @@ export const assets = {
   user_icon,
   down_arrow,
   up_arrow,
+  download,
+  white_arrow,
 };

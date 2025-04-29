@@ -12,6 +12,7 @@ function page() {
     title: "",
     subTitle: "",
     description: "",
+    pdfUrl: "",
     content: "",
     category: "",
     author: "Нагирняк Михаил Павлович",
@@ -27,6 +28,7 @@ function page() {
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     const formData = new FormData();
+    formData.append("pdfUrl", data.pdfUrl);
     formData.append("title", data.title);
     formData.append("subTitle", data.subTitle);
     formData.append("description", data.description);
@@ -43,6 +45,7 @@ function page() {
         title: "",
         subTitle: "",
         description: "",
+        pdfUrl: "",
         content: "",
         category: "",
         author: "Нагирняк Михаил Павлович",
@@ -72,6 +75,15 @@ function page() {
           id="image"
           hidden
           required
+        />
+        <p className="text-xl mt-4">Ссылка на скачивание книги с гугл-диска</p>
+        <input
+          name="pdfUrl"
+          onChange={onChangeHandler}
+          value={data.pdfUrl}
+          type="text"
+          placeholder="Введите ссылку на книгу"
+          className="w-full sm:w-[1000px] mt-4 px-4 py-3 border"
         />
         <p className="text-xl mt-4">Название книги</p>
         <input

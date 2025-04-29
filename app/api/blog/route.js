@@ -70,6 +70,7 @@ export async function POST(request) {
       description: formData.get("description"),
       content: formData.get("content"),
       category: formData.get("category"),
+      pdfUrl: formData.get("pdfUrl"),
       author: formData.get("author"),
       authorImg: formData.get("authorImg"),
       image: imgUrl,
@@ -105,7 +106,7 @@ export async function DELETE(request) {
     }
 
     await BlogModel.findByIdAndDelete(id);
-    return NextResponse.json({ message: "Blog Deleted" });
+    return NextResponse.json({ message: "Книга удалена" });
   } catch (error) {
     console.error(error);
     return NextResponse.json({ success: false, message: error.message });

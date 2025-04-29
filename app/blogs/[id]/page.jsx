@@ -87,15 +87,16 @@ function Page({ params }) {
           width={1280}
           height={720}
           alt=""
-          className="border-4 h-[550px] border-white"
+          className="border-4 border-white w-full h-auto sm:h-[550px] object-cover"
           priority
         />
         <div
-          className="blog-description"
+          className="blog-description px-4 sm:px-6 md:px-8 lg:px-0 text-sm sm:text-base leading-relaxed break-words"
           dangerouslySetInnerHTML={{ __html: data.description }}
         ></div>
+
         <div
-          className="blog-content"
+          className="break-words blog-content mt-8 px-4 sm:px-6 md:px-8 lg:px-0 text-sm text-justify hyphens-auto sm:text-start sm:text-base leading-relaxed"
           dangerouslySetInnerHTML={{
             __html: data.content,
           }}

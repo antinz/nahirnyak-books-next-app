@@ -1,7 +1,6 @@
 "use client";
 import React, { use } from "react";
 import parse, { domToReact } from "html-react-parser";
-
 import { useEffect, useState } from "react";
 import axios from "axios";
 import LoadingSpinner from "/Components/LoadingSpinner.jsx";
@@ -9,7 +8,6 @@ import Link from "next/link";
 import Image from "next/image";
 import Footer from "/Components/Footer.jsx";
 import { assets } from "/Assets/assets";
-import { Chathura } from "next/font/google";
 
 function ChapterPage({ params }) {
   const unwrappedParams = use(params);
@@ -30,26 +28,19 @@ function ChapterPage({ params }) {
       replace: (node) => {
         if (node.name === "sup" && node.children?.[0]?.data?.trim()) {
           const key = node.children[0].data.trim();
-
-          // Find the footnote with this exact key
           const footnoteObj = chapterData.currentChapter.footnotes?.find(
             (obj) => Object.keys(obj)[0] === key
           );
-
           const footnoteIndex = chapterData.currentChapter.footnotes?.findIndex(
             (obj) => Object.keys(obj)[0] === key
           );
-
           if (!footnoteObj || footnoteIndex === -1) return;
-
           if (expandedFootnotes[footnoteIndex]) {
             const rawNote = Object.values(footnoteObj)[0];
-
             const cleanedNote = rawNote?.replace(/<sup>.*?<\/sup>/i, "").trim();
-
             return (
               <span
-                className="mt-2 mb-4 p-3 border block border-l-5 rounded-xs border-grey-500 bg-grey-150 text-xs sm:text-sm cursor-pointer"
+                className="mt-3 mb-4 p-3 border-l-4 rounded border-gray-400 bg-gray-100 text-xs sm:text-sm block cursor-pointer"
                 onClick={() => toggleFootnote(footnoteIndex)}
                 title="Нажмите, чтобы скрыть сноску"
               >
@@ -75,10 +66,7 @@ function ChapterPage({ params }) {
   const fetchChapters = async () => {
     try {
       const res = await axios.get("/api/blog/chapter", {
-        params: {
-          id: unwrappedParams.id,
-          chapterId: unwrappedParams.chapterId,
-        },
+        params: { id, chapterId },
       });
       setChapterData(res.data);
     } catch (err) {
@@ -102,32 +90,37 @@ function ChapterPage({ params }) {
             <Image src={assets.logo} width={150} alt="Logo" />
           </Link>
         </div>
-        <div className="text-center my-24 mb-5">
-          <h1 className="text-2xl sm:text-3xl font-semibold max-w-[700px] mx-auto">
+        <div className="text-center mt-16 mb-8 px-3">
+          <h1 className="text-xl sm:text-3xl font-semibold max-w-[700px] mx-auto">
             {chapterData.currentChapter.title}
           </h1>
         </div>
       </div>
-      <div className="mx-5  max-w-[800px] md:mx-auto mt-[20px] mb-10 flex-grow">
-        <div className="blog-content">{renderContentWithInlineFootnotes()}</div>
-        <div className="text-center mt-7 flex gap-10 items-center">
-          {!chapterData.prevChapter ? null : (
-            <Link href={`/blogs/${id}/${chapterData.prevChapter?._id}`}>
-              <button className="flex items-center bg-white gap-2 font-medium py-1 px-3 sm:py-3 sm:px-6 border border-solid border-black cursor-pointer shadow-[_7px_7px_0px_#000000]">
+
+      <div className="mx-4 sm:mx-6 md:mx-10 max-w-[800px] md:mx-auto mt-4 mb-10 flex-grow">
+        <div className="blog-content prose prose-sm sm:prose-base break-words max-w-none text-justify sm:text-start hyphens-auto">
+          {renderContentWithInlineFootnotes()}
+        </div>
+
+        <div className="text-center mt-10 flex flex-col sm:flex-row gap-4 items-center justify-center">
+          {chapterData.prevChapter && (
+            <Link href={`/blogs/${id}/${chapterData.prevChapter._id}`}>
+              <button className="flex items-center bg-white gap-2 font-medium py-2 px-4 sm:py-3 sm:px-6 border border-black cursor-pointer shadow-[_7px_7px_0px_#000000]">
                 <Image src={assets.arrow} alt="" /> Предыдущая глава
               </button>
             </Link>
           )}
-
-          {!chapterData.nextChapter ? null : (
-            <Link href={`/blogs/${id}/${chapterData.nextChapter?._id}`}>
-              <button className="flex items-center bg-white gap-2 font-medium py-1 px-3 sm:py-3 sm:px-6 border border-solid border-black cursor-pointer shadow-[_7px_7px_0px_#000000]">
+          {chapterData.nextChapter && (
+            <Link href={`/blogs/${id}/${chapterData.nextChapter._id}`}>
+              <button className="flex items-center bg-white gap-2 font-medium py-2 px-4 sm:py-3 sm:px-6 border border-black cursor-pointer shadow-[_7px_7px_0px_#000000]">
                 Следующая глава <Image src={assets.right_arrow} alt="" />
               </button>
             </Link>
           )}
         </div>
       </div>
+
+      {/* Footer */}
       <Footer />
     </div>
   ) : (
