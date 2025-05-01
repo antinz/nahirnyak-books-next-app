@@ -31,7 +31,6 @@ export default function AboutAuthor() {
           blurDataURL="/author_image_min.png"
         />
 
-        {/* Author Text */}
         <div className="max-w-2xl leading-relaxed text-sm sm:text-base lg:text-lg">
           <p>
             <strong>Нагирняк Михаил Павлович</strong>, пресвитер, пастор церкви

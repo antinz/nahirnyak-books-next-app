@@ -98,13 +98,12 @@ export async function DELETE(request) {
       return NextResponse.json({ success: false, message: "Blog not found" });
     }
 
-    // Delete image from Cloudinary
     if (blog.imagePublicId) {
       await cloudinary.uploader.destroy(blog.imagePublicId);
     }
 
     await BlogModel.findByIdAndDelete(id);
-    return NextResponse.json({ message: "Книга удалена" });
+    return NextResponse.json({ success: true, message: "Книга удалена" });
   } catch (error) {
     console.error(error);
     return NextResponse.json({ success: false, message: error.message });
