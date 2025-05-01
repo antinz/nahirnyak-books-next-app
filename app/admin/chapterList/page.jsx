@@ -9,18 +9,34 @@ function page() {
   const [chapters, setChapters] = useState([]);
 
   const fetchChapters = async () => {
-    const res = await axios.get("/api/blog/chapter");
-    setChapters(res.data);
+    try {
+      const res = await axios.get("/api/blog/chapter");
+      if (res.data) {
+        setChapters(res.data);
+      } else {
+        toast.error("Не удалось загрузить главы");
+      }
+    } catch (error) {
+      console.error("Ошибка при загрузке глав:", error);
+      toast.error("Произошла ошибка при получении глав");
+    }
   };
 
   const deleteChapter = async (mongoId) => {
-    const res = await axios.delete("/api/blog/chapter", {
-      params: {
-        id: mongoId,
-      },
-    });
-    toast.success(res.data.message);
-    fetchChapters();
+    try {
+      const res = await axios.delete("/api/blog/chapter", {
+        params: { id: mongoId },
+      });
+      if (res.data.success) {
+        toast.success(res.data.message);
+        fetchChapters();
+      } else {
+        toast.error("Не удалось удалить главу");
+      }
+    } catch (error) {
+      console.error("Ошибка при удалении главы:", error);
+      toast.error("Произошла ошибка при удалении главы");
+    }
   };
 
   useEffect(() => {

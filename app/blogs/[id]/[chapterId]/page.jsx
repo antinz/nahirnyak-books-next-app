@@ -1,6 +1,5 @@
 "use client";
 import React, { use } from "react";
-import parse, { domToReact } from "html-react-parser";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import LoadingSpinner from "/Components/LoadingSpinner.jsx";
@@ -8,6 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Footer from "/Components/Footer.jsx";
 import { assets } from "/Assets/assets";
+import { renderContentWithInlineFootnotes } from "/utils/renderContentWithInlineFootnotes";
 
 function ChapterPage({ params }) {
   const unwrappedParams = use(params);
@@ -21,46 +21,6 @@ function ChapterPage({ params }) {
       ...prev,
       [index]: !prev[index],
     }));
-  };
-
-  const renderContentWithInlineFootnotes = () => {
-    return parse(chapterData.currentChapter.content, {
-      replace: (node) => {
-        if (node.name === "sup" && node.children?.[0]?.data?.trim()) {
-          const key = node.children[0].data.trim();
-          const footnoteObj = chapterData.currentChapter.footnotes?.find(
-            (obj) => Object.keys(obj)[0] === key
-          );
-          const footnoteIndex = chapterData.currentChapter.footnotes?.findIndex(
-            (obj) => Object.keys(obj)[0] === key
-          );
-          if (!footnoteObj || footnoteIndex === -1) return;
-          if (expandedFootnotes[footnoteIndex]) {
-            const rawNote = Object.values(footnoteObj)[0];
-            const cleanedNote = rawNote?.replace(/<sup>.*?<\/sup>/i, "").trim();
-            return (
-              <span
-                className="mt-3 mb-4 p-3 border-l-4 rounded border-gray-400 bg-gray-100 text-xs sm:text-sm block cursor-pointer"
-                onClick={() => toggleFootnote(footnoteIndex)}
-                title="Нажмите, чтобы скрыть сноску"
-              >
-                {parse(cleanedNote || "Сноска не найдена")}
-              </span>
-            );
-          } else {
-            return (
-              <sup
-                className="cursor-pointer text-blue-600 underline"
-                onClick={() => toggleFootnote(footnoteIndex)}
-                title="Нажмите, чтобы показать сноску"
-              >
-                {key}
-              </sup>
-            );
-          }
-        }
-      },
-    });
   };
 
   const fetchChapters = async () => {
@@ -97,9 +57,13 @@ function ChapterPage({ params }) {
         </div>
       </div>
 
-      <div className="mx-4 sm:mx-6 md:mx-10 max-w-[800px] md:mx-auto mt-4 mb-10 flex-grow">
-        <div className="blog-content prose prose-sm sm:prose-base break-words max-w-none text-justify sm:text-start hyphens-auto">
-          {renderContentWithInlineFootnotes()}
+      <div className="mx-4 sm:mx-6 md:mx-10 max-w-[800px] md:mx-auto mt-4 mb-10">
+        <div className="blog-content max-w-none text-justify sm:text-start">
+          {renderContentWithInlineFootnotes(
+            chapterData,
+            expandedFootnotes,
+            toggleFootnote
+          )}
         </div>
 
         <div className="text-center mt-10 flex flex-col sm:flex-row gap-4 items-center justify-center">

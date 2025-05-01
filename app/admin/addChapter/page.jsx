@@ -23,33 +23,46 @@ function page() {
   };
 
   const getBlogIdandTitle = async () => {
-    const res = await axios.get(`/api/blog`);
-    if (res.data.success) {
-      setBlogTitles(res.data.blogs);
+    try {
+      const res = await axios.get(`/api/blog`);
+      if (res.data.success) {
+        setBlogTitles(res.data.blogs);
+      } else {
+        toast.error("Ошибка при загрузке книг");
+      }
+    } catch (error) {
+      console.error("Ошибка при загрузке книг:", error);
+      toast.error("Произошла ошибка при загрузке книг");
     }
   };
+
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-    const selectedBlog = blogTitles.find((blog) => blog._id === data.blogId);
-    const res = await axios.post(`/api/blog/chapter`, {
-      blogId: data.blogId,
-      blogTitle: selectedBlog?.title || "",
-      title: data.title,
-      content: data.content,
-      chapterNumber: Number(data.chapterNumber),
-      footnotes: footnotes,
-    });
-
-    if (res.data.success) {
-      toast.success("Глава успешно добавлена");
-      setData({
-        title: "",
-        blogTitle: "",
-        content: "",
-        chapterNumber: 1,
+    try {
+      const selectedBlog = blogTitles.find((blog) => blog._id === data.blogId);
+      const res = await axios.post(`/api/blog/chapter`, {
+        blogId: data.blogId,
+        blogTitle: selectedBlog?.title || "",
+        title: data.title,
+        content: data.content,
+        chapterNumber: Number(data.chapterNumber),
+        footnotes: footnotes,
       });
-    } else {
-      toast.error("Ошибка при добавлении");
+
+      if (res.data.success) {
+        toast.success("Глава успешно добавлена");
+        setData({
+          title: "",
+          blogTitle: "",
+          content: "",
+          chapterNumber: 1,
+        });
+      } else {
+        toast.error("Ошибка при добавлении");
+      }
+    } catch (error) {
+      console.error("Ошибка при добавлении главы:", error);
+      toast.error("Произошла ошибка при добавлении главы");
     }
   };
 

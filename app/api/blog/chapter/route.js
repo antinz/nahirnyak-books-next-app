@@ -15,7 +15,6 @@ export async function GET(request) {
     const chapterId = await request.nextUrl.searchParams.get("chapterId");
 
     if (chapterId) {
-      // Fetch current chapter by its _id
       const chapter = await ChapterModel.findById(chapterId);
 
       const nextChapter = await ChapterModel.findOne({
@@ -84,8 +83,31 @@ export async function POST(request) {
 //API endpoint to delete blog
 
 export async function DELETE(request) {
-  const chapterId = await request.nextUrl.searchParams.get("id");
-  const chapter = await ChapterModel.findById(chapterId);
-  await ChapterModel.findByIdAndDelete(chapter);
-  return NextResponse.json({ message: "Глава удалена" });
+  try {
+    const chapterId = request.nextUrl.searchParams.get("id");
+
+    if (!chapterId) {
+      return NextResponse.json(
+        { success: false, message: "ID главы не предоставлен" },
+        { status: 400 }
+      );
+    }
+
+    const chapter = await ChapterModel.findById(chapterId);
+    if (!chapter) {
+      return NextResponse.json(
+        { success: false, message: "Глава не найдена" },
+        { status: 404 }
+      );
+    }
+
+    await ChapterModel.findByIdAndDelete(chapterId);
+    return NextResponse.json({ success: true, message: "Глава удалена" });
+  } catch (error) {
+    console.error("Ошибка при удалении главы:", error);
+    return NextResponse.json(
+      { success: false, message: "Ошибка сервера при удалении главы" },
+      { status: 500 }
+    );
+  }
 }

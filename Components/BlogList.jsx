@@ -12,8 +12,17 @@ function BlogList() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const fetchBlogs = async () => {
-    const res = await axios.get("/api/blog");
-    setBlogs(res.data.blogs);
+    try {
+      const res = await axios.get("/api/blog");
+      if (res.data.success) {
+        setBlogs(res.data.blogs);
+      } else {
+        toast.error("Не удалось загрузить книги");
+      }
+    } catch (error) {
+      console.error("Ошибка при загрузке книг:", error);
+      toast.error("Произошла ошибка при получении книг");
+    }
   };
 
   useEffect(() => {

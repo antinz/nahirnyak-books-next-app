@@ -14,6 +14,7 @@ export async function POST(request) {
     const emailData = {
       email: `${formData.get("email")}`,
     };
+
     await EmailModel.create(emailData);
     return NextResponse.json({
       success: true,
@@ -28,14 +29,38 @@ export async function POST(request) {
 }
 
 export async function GET(request) {
-  const emails = await EmailModel.find({});
-  return NextResponse.json({
-    emails,
-  });
+  try {
+    const emails = await EmailModel.find({});
+    return NextResponse.json({ success: true, emails });
+  } catch (error) {
+    console.error("Ошибка при получении email-адресов:", error);
+    return NextResponse.json(
+      { success: false, message: "Ошибка сервера при получении email-адресов" },
+      { status: 500 }
+    );
+  }
 }
 
 export async function DELETE(request) {
-  const id = await request.nextUrl.searchParams.get("id");
-  await EmailModel.findByIdAndDelete(id);
-  return NextResponse.json({ success: true, message: "Еmail успешно удален" });
+  try {
+    const id = request.nextUrl.searchParams.get("id");
+    if (!id) {
+      return NextResponse.json(
+        { success: false, message: "ID не предоставлен" },
+        { status: 400 }
+      );
+    }
+
+    await EmailModel.findByIdAndDelete(id);
+    return NextResponse.json({
+      success: true,
+      message: "Еmail успешно удален",
+    });
+  } catch (error) {
+    console.error("Ошибка при удалении email:", error);
+    return NextResponse.json(
+      { success: false, message: "Ошибка сервера при удалении email" },
+      { status: 500 }
+    );
+  }
 }

@@ -2,8 +2,6 @@ import { ConnectDB } from "/lib/config/db.js";
 import BlogModel from "/lib/config/models/BlogModel.js";
 import { v2 as cloudinary } from "cloudinary";
 import { NextResponse } from "next/server";
-
-// Initialize DB connection
 const LoadDB = async () => {
   await ConnectDB();
 };

@@ -6,8 +6,7 @@ import LoadingSpinner from "/Components/LoadingSpinner.jsx";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { use } from "react";
+import { use, useEffect, useState } from "react";
 
 function Page({ params }) {
   const unwrappedParams = use(params);
@@ -91,12 +90,12 @@ function Page({ params }) {
           priority
         />
         <div
-          className="blog-description px-4 sm:px-6 md:px-8 lg:px-0 text-sm sm:text-base leading-relaxed break-words"
+          className="blog-description px-4 sm:px-6 md:px-8 lg:px-0 text-sm sm:text-base leading-relaxed "
           dangerouslySetInnerHTML={{ __html: data.description }}
         ></div>
 
         <div
-          className="break-words blog-content mt-8 px-4 sm:px-6 md:px-8 lg:px-0 text-sm text-justify hyphens-auto sm:text-start sm:text-base leading-relaxed"
+          className="blog-content mt-8 px-4 sm:px-6 md:px-8 lg:px-0 text-sm text-justify hyphens-auto sm:text-start sm:text-base leading-relaxed"
           dangerouslySetInnerHTML={{
             __html: data.content,
           }}

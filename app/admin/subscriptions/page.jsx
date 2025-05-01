@@ -9,21 +9,33 @@ function page() {
   const [emails, setEmails] = useState([]);
 
   const fetchEmails = async () => {
-    const res = await axios.get("/api/email");
-    setEmails(res.data.emails);
+    try {
+      const res = await axios.get("/api/email");
+      if (res.data.success) {
+        setEmails(res.data.emails);
+      } else {
+        toast.error("Не удалось загрузить email");
+      }
+    } catch (error) {
+      console.error("Ошибка при загрузке email:", error);
+      toast.error("Произошла ошибка при получении email");
+    }
   };
 
   const deleteEmail = async (mongoId) => {
-    const res = await axios.delete("/api/email", {
-      params: {
-        id: mongoId,
-      },
-    });
-    if (res.data.success) {
-      toast.success(res.data.message);
-      fetchEmails();
-    } else {
-      toast.error("Error");
+    try {
+      const res = await axios.delete("/api/email", {
+        params: { id: mongoId },
+      });
+      if (res.data.success) {
+        toast.success(res.data.message);
+        fetchEmails();
+      } else {
+        toast.error("Не удалось удалить email");
+      }
+    } catch (error) {
+      console.error("Ошибка при удалении email:", error);
+      toast.error("Произошла ошибка при удалении email");
     }
   };
 

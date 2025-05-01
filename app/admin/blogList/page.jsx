@@ -9,18 +9,34 @@ function page() {
   const [blogs, setBlogs] = useState([]);
 
   const fetchBlogs = async () => {
-    const res = await axios.get("/api/blog");
-    setBlogs(res.data.blogs);
+    try {
+      const res = await axios.get("/api/blog");
+      if (res.data.success) {
+        setBlogs(res.data.blogs);
+      } else {
+        toast.error("Не удалось загрузить блоги");
+      }
+    } catch (error) {
+      console.error("Ошибка при загрузке блогов:", error);
+      toast.error("Произошла ошибка при получении блогов");
+    }
   };
 
   const deleteBlog = async (mongoId) => {
-    const res = await axios.delete("/api/blog", {
-      params: {
-        id: mongoId,
-      },
-    });
-    toast.success(res.data.message);
-    fetchBlogs();
+    try {
+      const res = await axios.delete("/api/blog", {
+        params: { id: mongoId },
+      });
+      if (res.data.success) {
+        toast.success(res.data.message);
+        fetchBlogs();
+      } else {
+        toast.error("Не удалось удалить книгу");
+      }
+    } catch (error) {
+      console.error("Ошибка при удалении книги:", error);
+      toast.error("Произошла ошибка при удалении книги");
+    }
   };
 
   useEffect(() => {
