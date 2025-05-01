@@ -7,7 +7,6 @@ import Link from "next/link";
 export default function AboutAuthor() {
   return (
     <>
-      {/* Header */}
       <div className="py-5 px-4 sm:px-6 md:px-12 lg:px-28">
         <div className="flex justify-between items-center">
           <Link href="/">
@@ -21,9 +20,7 @@ export default function AboutAuthor() {
         </div>
       </div>
 
-      {/* Main Content */}
       <div className="flex flex-col lg:flex-row items-center justify-center gap-8 px-4 sm:px-10 py-10 text-justify">
-        {/* Author Image */}
         <Image
           src="/author_image.png"
           alt="Фото автора Нагирняк Михаил Павлович"

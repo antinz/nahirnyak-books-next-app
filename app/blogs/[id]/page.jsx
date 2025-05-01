@@ -90,16 +90,16 @@ function Page({ params }) {
           priority
         />
         <div
-          className="blog-description px-4 sm:px-6 md:px-8 lg:px-0 text-sm sm:text-base leading-relaxed "
+          className="blog-description px-4 sm:px-6 md:px-8 lg:px-0"
           dangerouslySetInnerHTML={{ __html: data.description }}
         ></div>
-
         <div
           className="blog-content mt-8 px-4 sm:px-6 md:px-8 lg:px-0 text-sm text-justify hyphens-auto sm:text-start sm:text-base leading-relaxed"
           dangerouslySetInnerHTML={{
             __html: data.content,
           }}
         ></div>
+
         {chapterData && chapterData.length > 0 && (
           <div className="text-center mt-10">
             <Link href={`/blogs/${unwrappedParams.id}/${chapterData[0]._id}`}>
