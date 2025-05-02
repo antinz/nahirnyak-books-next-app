@@ -16,10 +16,35 @@ function page() {
   const [blogTitles, setBlogTitles] = useState([]);
   const [footnotes, setFootnotes] = useState([]);
 
-  const onChangeHandler = (e) => {
+  const onChangeHandler = async (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    setData({ ...data, [name]: value });
+
+    // If the blog selection changed, fetch the last chapter number
+    if (name === "blogId") {
+      try {
+        const res = await axios.get(
+          `/api/blog/chapter?latest=true&id=${value}`
+        );
+        if (res.data.success) {
+          const nextChapterNumber = res.data.lastChapterNumber + 1;
+          setData((prev) => ({
+            ...prev,
+            blogId: value,
+            chapterNumber: nextChapterNumber,
+          }));
+        } else {
+          toast.error("Не удалось получить номер главы");
+          setData((prev) => ({ ...prev, blogId: value, chapterNumber: 1 }));
+        }
+      } catch (error) {
+        console.error("Ошибка при получении номера главы:", error);
+        toast.error("Ошибка при загрузке номера главы");
+        setData((prev) => ({ ...prev, blogId: value, chapterNumber: 1 }));
+      }
+    } else {
+      setData({ ...data, [name]: value });
+    }
   };
 
   const getBlogIdandTitle = async () => {
@@ -52,13 +77,14 @@ function page() {
       if (res.data.success) {
         toast.success("Глава успешно добавлена");
         setData({
+          blogId: "",
           title: "",
           blogTitle: "",
           content: "",
           chapterNumber: 1,
         });
       } else {
-        toast.error("Ошибка при добавлении");
+        toast.error(res.data.message || "Ошибка при добавлении");
       }
     } catch (error) {
       console.error("Ошибка при добавлении главы:", error);

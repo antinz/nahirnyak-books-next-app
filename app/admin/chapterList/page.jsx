@@ -12,7 +12,7 @@ function page() {
     try {
       const res = await axios.get("/api/blog/chapter");
       if (res.data) {
-        setChapters(res.data);
+        setChapters(res.data.reverse());
       } else {
         toast.error("Не удалось загрузить главы");
       }
@@ -22,7 +22,12 @@ function page() {
     }
   };
 
-  const deleteChapter = async (mongoId) => {
+  const deleteChapter = async (mongoId, title) => {
+    const confirmDelete = window.confirm(
+      `Вы уверены, что хотите удалить главу ${title}?`
+    );
+    if (!confirmDelete) return;
+
     try {
       const res = await axios.delete("/api/blog/chapter", {
         params: { id: mongoId },
@@ -72,7 +77,7 @@ function page() {
                   blogTitle={item.blogTitle}
                   title={item.title}
                   date={item.date}
-                  deleteChapter={deleteChapter}
+                  deleteChapter={() => deleteChapter(item._id, item.title)}
                 />
               );
             })}

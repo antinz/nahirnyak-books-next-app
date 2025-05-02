@@ -15,7 +15,7 @@ function ChapterTableItem({ title, date, deleteChapter, mongoId, blogTitle }) {
       <td className="px-6 py-4">{chapterDate.toDateString()}</td>
       <td
         className="px-6 py-4 cursor-pointer"
-        onClick={() => deleteChapter(mongoId)}
+        onClick={() => deleteChapter(mongoId, title)}
       >
         X
       </td>

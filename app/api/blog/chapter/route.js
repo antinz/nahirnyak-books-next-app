@@ -11,8 +11,23 @@ LoadDB();
 // API Endpoint to get all book chapters
 export async function GET(request) {
   try {
-    const blogId = await request.nextUrl.searchParams.get("id");
-    const chapterId = await request.nextUrl.searchParams.get("chapterId");
+    const url = request.nextUrl;
+    const blogId = url.searchParams.get("id");
+    const chapterId = url.searchParams.get("chapterId");
+    const latest = url.searchParams.get("latest");
+
+    if (latest && blogId) {
+      const latestChapter = await ChapterModel.findOne({ blogId })
+        .sort({ chapterNumber: -1 }) // ✅ more reliable
+        .select("chapterNumber");
+
+      const lastNumber = latestChapter ? latestChapter.chapterNumber : 0;
+
+      return NextResponse.json({
+        success: true,
+        lastChapterNumber: lastNumber,
+      });
+    }
 
     if (chapterId) {
       const chapter = await ChapterModel.findById(chapterId);
@@ -22,7 +37,6 @@ export async function GET(request) {
         chapterNumber: chapter.chapterNumber + 1,
       });
 
-      // Fetch the previous chapter by chapterNumber
       const prevChapter = await ChapterModel.findOne({
         blogId,
         chapterNumber: chapter.chapterNumber - 1,
@@ -57,6 +71,17 @@ export async function POST(request) {
     const body = await request.json();
     const { blogId, title, content, chapterNumber, blogTitle, footnotes } =
       body;
+    const existingChapter = await ChapterModel.findOne({
+      blogId,
+      chapterNumber,
+    });
+
+    if (existingChapter) {
+      return NextResponse.json({
+        success: false,
+        message: `Глава №${chapterNumber} уже существует для этой книги.`,
+      });
+    }
 
     const newChapter = await ChapterModel.create({
       blogId,

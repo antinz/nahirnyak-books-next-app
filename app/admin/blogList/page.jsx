@@ -12,7 +12,7 @@ function page() {
     try {
       const res = await axios.get("/api/blog");
       if (res.data.success) {
-        setBlogs(res.data.blogs);
+        setBlogs(res.data.blogs.reverse());
       } else {
         toast.error("Не удалось загрузить блоги");
       }
