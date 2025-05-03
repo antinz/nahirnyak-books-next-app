@@ -32,9 +32,11 @@ export default function Home() {
     <div className="min-h-screen flex flex-col">
       <ToastContainer theme="dark" />
       <Header />
+
       <main className="flex-grow">
         <BlogList blogs={blogs} />
       </main>
+
       <Footer />
     </div>
   );

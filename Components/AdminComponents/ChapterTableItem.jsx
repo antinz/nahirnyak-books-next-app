@@ -12,7 +12,7 @@ function ChapterTableItem({ title, date, deleteChapter, mongoId, blogTitle }) {
       </th>
 
       <td className="px-6 py-4">{title ? title : "no title"}</td>
-      <td className="px-6 py-4">{chapterDate.toDateString()}</td>
+      <td className="px-6 py-4">{chapterDate.toLocaleDateString()}</td>
       <td
         className="px-6 py-4 cursor-pointer"
         onClick={() => deleteChapter(mongoId, title)}

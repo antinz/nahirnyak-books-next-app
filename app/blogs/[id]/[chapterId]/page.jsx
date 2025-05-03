@@ -1,5 +1,6 @@
 "use client";
 import React, { use } from "react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import LoadingSpinner from "/Components/LoadingSpinner.jsx";
@@ -10,6 +11,7 @@ import { assets } from "/Assets/assets";
 import { renderContentWithInlineFootnotes } from "/utils/renderContentWithInlineFootnotes";
 
 function ChapterPage({ params }) {
+  const router = useRouter();
   const unwrappedParams = use(params);
   const { id, chapterId } = unwrappedParams;
   const [chapterData, setChapterData] = useState(null);
@@ -28,7 +30,18 @@ function ChapterPage({ params }) {
       const res = await axios.get("/api/blog/chapter", {
         params: { id, chapterId },
       });
+      if (!res.data.currentChapter) {
+        if (res.data.prevChapter) {
+          router.replace(`/blogs/${id}/${res.data.prevChapter._id}`);
+        } else if (res.data) {
+          router.replace(`/blogs/${id}`);
+        } else {
+          router.replace("/");
+        }
+        return;
+      }
       setChapterData(res.data);
+      console.log(res.data);
     } catch (err) {
       console.error("Failed to load chapter", err);
     } finally {
@@ -56,7 +69,6 @@ function ChapterPage({ params }) {
           </h1>
         </div>
       </div>
-
       <div className="mx-4 sm:mx-6 md:mx-10 max-w-[800px] md:mx-auto mt-4 mb-10">
         <div className="blog-content max-w-none text-justify sm:text-start">
           {renderContentWithInlineFootnotes(
@@ -83,9 +95,6 @@ function ChapterPage({ params }) {
           )}
         </div>
       </div>
-
-      {/* Footer */}
-      <Footer />
     </div>
   ) : (
     <p className="text-center mt-10">Глава не найдена.</p>
