@@ -17,7 +17,7 @@ function Footer() {
 
         {/* About Button */}
         <Link href="/author">
-          <button className="flex items-center gap-2 py-2 px-4 sm:py-3 sm:px-6 border border-white bg text-white cursor-pointer shadow-[_7px_7px_0px_#ffffff] hover:bg-white hover:border-black hover:text-black transition">
+          <button className="flex items-center gap-1 py-2 px-2 sm:py-3 sm:px-6 border border-white bg text-white cursor-pointer shadow-[_5px_5px_0px_#ffffff] hover:bg-white hover:border-black hover:text-black transition text-xs sm:text-sm">
             Об авторе
           </button>
         </Link>
