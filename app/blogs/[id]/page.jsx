@@ -46,6 +46,13 @@ function Page({ params }) {
     fetchBlogData();
     setLoading(false);
   }, []);
+
+  const prefix = "Послание к";
+  let displayTitle = data?.title;
+  if (displayTitle && displayTitle.includes(prefix)) {
+    displayTitle = displayTitle.split(new RegExp(`\\s*${prefix}\\s*`))[1];
+  }
+
   return loading ? (
     <LoadingSpinner loading={loading} />
   ) : data ? (
@@ -81,14 +88,21 @@ function Page({ params }) {
         </div>
       </div>
       <div className="mx-5 max-w-[800px] md:mx-auto mt-[-100px] mb-10">
-        <Image
-          src={data.image}
-          width={1280}
-          height={720}
-          alt=""
-          className="border-4 border-white w-full h-auto sm:h-[550px] object-cover"
-          priority
-        />
+        <div className="relative">
+          <Image
+            src={data.image}
+            width={1280}
+            height={720}
+            alt=""
+            className="border-4 border-white w-full h-auto sm:h-[550px] object-cover"
+            priority
+          />
+          {data.category === "Беседы о воле Божией" && (
+            <span className="absolute md:top-35 lg:top-40 sm:30 top-22 left-0 bg-opacity-60 text-white font-extrabold text-xl sm:text-3xl md:text-4xl lg:text-5xl p-2 w-full text-center uppercase">
+              {displayTitle}
+            </span>
+          )}
+        </div>
         <div
           className="blog-description px-4 sm:px-6 md:px-8 lg:px-0"
           dangerouslySetInnerHTML={{ __html: data.description }}

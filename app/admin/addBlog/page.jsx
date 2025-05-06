@@ -143,7 +143,9 @@ function page() {
           <option value="Христианские рассказы">Христианские рассказы</option>
           <option value="Богословие">Богословие</option>
           <option value="Беседы о воле Божией">Беседы о воле Божией</option>
-          <option value="Для супругов">Для супругов</option>
+          <option value="Брак и семья">Брак и семья</option>
+          <option value="Для служителей">Для служителей</option>
+          <option value="Проповеди и статьи">Проповеди и статьи</option>
         </select>
         <br />
         <button

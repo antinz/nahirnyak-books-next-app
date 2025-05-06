@@ -4,6 +4,7 @@ import axios from "axios";
 import LoadingSpinner from "./LoadingSpinner.jsx";
 import { assets } from "/Assets/assets.js";
 import Image from "next/image.js";
+import { toast } from "react-toastify";
 
 function BlogList() {
   const [menu, setMenu] = useState("Все");
@@ -22,12 +23,13 @@ function BlogList() {
     } catch (error) {
       console.error("Ошибка при загрузке книг:", error);
       toast.error("Произошла ошибка при получении книг");
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchBlogs();
-    setLoading(false);
   }, []);
 
   const categories = [
@@ -35,15 +37,19 @@ function BlogList() {
     "Христианские рассказы",
     "Богословие",
     "Беседы о воле Божией",
-    "Для супругов",
+    "Брак и семья",
+    "Для служителей",
+    "Проповеди и статьи",
   ];
 
   return (
     <div className="px-4 sm:px-8">
+      {/* Mobile dropdown title */}
       <p className="text-base text-center mt-4 mb-2 sm:hidden font-semibold">
         Категории
       </p>
 
+      {/* Mobile dropdown button */}
       <div className="flex justify-center my-4 sm:hidden">
         <button
           onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -58,6 +64,7 @@ function BlogList() {
         </button>
       </div>
 
+      {/* Mobile dropdown items */}
       {dropdownOpen && (
         <div className="flex flex-col items-center gap-2 mb-6 sm:hidden">
           {categories.map((category) => (
@@ -77,6 +84,7 @@ function BlogList() {
         </div>
       )}
 
+      {/* Desktop category buttons */}
       <div className="hidden sm:flex justify-center flex-wrap gap-4 my-10">
         {categories.map((category) => (
           <button
@@ -91,10 +99,14 @@ function BlogList() {
         ))}
       </div>
 
-      <div className="flex flex-col sm:flex-row justify-center items-center gap-6 sm:gap-8 gap-y-10 mb-16">
-        <LoadingSpinner loading={loading} />
-        {!loading &&
-          blogs
+      {/* Blog items */}
+      {loading ? (
+        <div className="flex justify-center items-center my-16">
+          <LoadingSpinner loading={loading} />
+        </div>
+      ) : (
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+          {blogs
             .filter((item) => (menu === "Все" ? true : item.category === menu))
             .map((item, i) => (
               <BlogItem
@@ -108,7 +120,8 @@ function BlogList() {
                 pdfUrl={item.pdfUrl}
               />
             ))}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -26,7 +26,7 @@ function BlogTableItem({
         <p>{author ? author : "N/A"}</p>
       </th>
       <td className="px-6 py-4">{title ? title : "no title"}</td>
-      <td className="px-6 py-4">{blogDate.toDateString()}</td>
+      <td className="px-6 py-4">{blogDate.toLocaleDateString()}</td>
       <td
         className="px-6 py-4 cursor-pointer"
         onClick={() => deleteBlog(mongoId)}

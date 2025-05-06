@@ -33,7 +33,7 @@ export default function Home() {
       <ToastContainer theme="dark" />
       <Header />
 
-      <main className="flex-grow">
+      <main className="flex-grow px-4 sm:px-8 max-w-7xl mx-auto w-full">
         <BlogList blogs={blogs} />
       </main>
 

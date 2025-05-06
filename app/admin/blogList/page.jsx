@@ -12,7 +12,7 @@ function page() {
     try {
       const res = await axios.get("/api/blog");
       if (res.data.success) {
-        setBlogs(res.data.blogs.reverse());
+        setBlogs(res.data.blogs);
       } else {
         toast.error("Не удалось загрузить блоги");
       }
@@ -22,7 +22,11 @@ function page() {
     }
   };
 
-  const deleteBlog = async (mongoId) => {
+  const deleteBlog = async (mongoId, title) => {
+    const confirmDelete = window.confirm(
+      `ВЫ ТОЧНО УВЕРЕНЫ, ЧТО ХОТИТЕ УДАЛИТЬ КНИГУ "${title.toUpperCase()}"? ЭТО НАВСЕГДА УДАЛИТ КНИГУ ИЗ БАЗЫ ДАННЫХ!!!`
+    );
+    if (!confirmDelete) return;
     try {
       const res = await axios.delete("/api/blog", {
         params: { id: mongoId },
@@ -73,7 +77,7 @@ function page() {
                   author={item.author}
                   authorImg={item.authorImg}
                   date={item.date}
-                  deleteBlog={deleteBlog}
+                  deleteBlog={() => deleteBlog(item._id, item.title)}
                 />
               );
             })}

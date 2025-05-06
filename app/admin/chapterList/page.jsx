@@ -26,7 +26,7 @@ function Page() {
 
   const deleteChapter = async (mongoId, title) => {
     const confirmDelete = window.confirm(
-      `Вы уверены, что хотите удалить главу ${title}?`
+      `ВЫ ТОЧНО УВЕРЕНЫ, ЧТО ХОТИТЕ УДАЛИТЬ ГЛАВУ "${title.toUpperCase()}"? ЭТО НАВСЕГДА УДАЛИТ ГЛАВУ ИЗ БАЗЫ ДАННЫХ!!!`
     );
     if (!confirmDelete) return;
 
