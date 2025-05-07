@@ -74,6 +74,7 @@ export async function POST(request) {
       image: imgUrl,
       imagePublicId: publicId,
       date: Date.now(),
+      footnotes: JSON.parse(formData.get("footnotes") || "[]"),
     };
 
     await BlogModel.create(blogData);

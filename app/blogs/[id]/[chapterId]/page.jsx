@@ -40,7 +40,6 @@ function ChapterPage({ params }) {
         return;
       }
       setChapterData(res.data);
-      console.log(res.data);
     } catch (err) {
       console.error("Failed to load chapter", err);
     } finally {

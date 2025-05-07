@@ -20,7 +20,6 @@ function page() {
     const name = e.target.name;
     const value = e.target.value;
 
-    // If the blog selection changed, fetch the last chapter number
     if (name === "blogId") {
       try {
         const res = await axios.get(

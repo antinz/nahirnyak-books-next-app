@@ -2,19 +2,19 @@ import { assets } from "/Assets/assets";
 import parse from "html-react-parser";
 import Image from "next/image";
 
-export function renderContentWithInlineFootnotes(
-  chapterData,
+export function renderContentWithInlineFootnotesForBlogPage(
+  data,
   expandedFootnotes,
   toggleFootnote
 ) {
-  return parse(chapterData.currentChapter.content, {
+  return parse(data.content, {
     replace: (node) => {
       if (node.name === "sup" && node.children?.[0]?.data?.trim()) {
         const key = node.children[0].data.trim();
-        const footnoteObj = chapterData.currentChapter.footnotes?.find(
+        const footnoteObj = data.footnotes?.find(
           (obj) => Object.keys(obj)[0] === key
         );
-        const footnoteIndex = chapterData.currentChapter.footnotes?.findIndex(
+        const footnoteIndex = data.footnotes?.findIndex(
           (obj) => Object.keys(obj)[0] === key
         );
         if (!footnoteObj || footnoteIndex === -1) return;

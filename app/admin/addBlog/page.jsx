@@ -3,8 +3,9 @@
 import { assets } from "/Assets/assets";
 import axios from "axios";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { extractFootnotesFromHtml } from "../../../utils/extractFootnotes";
 
 function page() {
   const [image, setImage] = useState(false);
@@ -18,6 +19,7 @@ function page() {
     author: "Нагирняк Михаил Павлович",
     authorImg: "/author_img.jpg",
   });
+  const [footnotes, setFootnotes] = useState([]);
 
   const onChangeHandler = (e) => {
     const name = e.target.name;
@@ -37,6 +39,7 @@ function page() {
     formData.append("author", data.author);
     formData.append("authorImg", data.authorImg);
     formData.append("image", image);
+    formData.append("footnotes", JSON.stringify(footnotes));
     const res = await axios.post(`/api/blog`, formData);
     if (res.data.success) {
       toast.success(res.data.message);
@@ -55,6 +58,13 @@ function page() {
       toast.error(res.data.message);
     }
   };
+
+  useEffect(() => {
+    const results = extractFootnotesFromHtml(data.content);
+    setFootnotes(results);
+    console.log(footnotes);
+  }, [data.content]);
+  console.log(footnotes);
   return (
     <>
       <form onSubmit={onSubmitHandler} className="pt-5 px-5 sm:pt-12 sm:pl-16">

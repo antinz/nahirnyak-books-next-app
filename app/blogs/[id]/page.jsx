@@ -7,12 +7,21 @@ import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { use, useEffect, useState } from "react";
+import { renderContentWithInlineFootnotesForBlogPage } from "/utils/renderContentWithInlineFootnotesForBlogPage";
 
 function Page({ params }) {
   const unwrappedParams = use(params);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [chapterData, setChapterData] = useState(null);
+  const [expandedFootnotes, setExpandedFootnotes] = useState({});
+
+  const toggleFootnote = (index) => {
+    setExpandedFootnotes((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }));
+  };
 
   const fetchBlogData = async () => {
     const res = await axios.get("/api/blog", {
@@ -107,12 +116,13 @@ function Page({ params }) {
           className="blog-description px-4 sm:px-6 md:px-8 lg:px-0"
           dangerouslySetInnerHTML={{ __html: data.description }}
         ></div>
-        <div
-          className="blog-content mt-8 px-4 sm:px-6 md:px-8 lg:px-0 text-sm text-justify hyphens-auto sm:text-start sm:text-base leading-relaxed"
-          dangerouslySetInnerHTML={{
-            __html: data.content,
-          }}
-        ></div>
+        <div className="blog-content max-w-none text-justify sm:text-start">
+          {renderContentWithInlineFootnotesForBlogPage(
+            data,
+            expandedFootnotes,
+            toggleFootnote
+          )}
+        </div>
 
         {chapterData && chapterData.length > 0 && (
           <div className="text-center mt-10">

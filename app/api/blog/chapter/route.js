@@ -18,7 +18,7 @@ export async function GET(request) {
 
     if (latest && blogId) {
       const latestChapter = await ChapterModel.findOne({ blogId })
-        .sort({ chapterNumber: -1 }) // ✅ more reliable
+        .sort({ chapterNumber: -1 })
         .select("chapterNumber");
 
       const lastNumber = latestChapter ? latestChapter.chapterNumber : 0;
