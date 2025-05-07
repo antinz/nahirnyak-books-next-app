@@ -69,8 +69,13 @@ export async function GET(request) {
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { blogId, title, content, chapterNumber, blogTitle, footnotes } =
-      body;
+    const { blogId, title, content, blogTitle, footnotes } = body;
+
+    const latestChapter = await ChapterModel.findOne({ blogId }).sort({
+      chapterNumber: -1,
+    });
+    const chapterNumber = latestChapter ? latestChapter.chapterNumber + 1 : 1;
+
     const existingChapter = await ChapterModel.findOne({
       blogId,
       chapterNumber,
