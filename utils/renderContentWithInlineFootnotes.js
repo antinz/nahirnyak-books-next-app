@@ -1,4 +1,6 @@
+import { assets } from "/Assets/assets";
 import parse from "html-react-parser";
+import Image from "next/image";
 
 export function renderContentWithInlineFootnotes(
   chapterData,
@@ -31,11 +33,17 @@ export function renderContentWithInlineFootnotes(
         } else {
           return (
             <sup
-              className="cursor-pointer text-blue-600 underline"
+              className="relative text-blue-600 underline cursor-pointer"
               onClick={() => toggleFootnote(footnoteIndex)}
               title="Нажмите, чтобы показать сноску"
             >
-              {key}
+              <span className="invisible">{key}</span>
+              <span
+                aria-hidden="true"
+                className="absolute left-0 top-0 visible"
+              >
+                <Image src={assets.comment_icon} alt="" />
+              </span>
             </sup>
           );
         }

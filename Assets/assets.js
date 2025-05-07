@@ -13,6 +13,8 @@ import up_arrow from "./up_arrow.png";
 import download from "./download.png";
 import white_arrow from "./white_arrow.png";
 import home_icon from "./home_icon.png";
+import comment_icon from "./comment_icon.png";
+import edit_icon from "./edit_icon.png";
 
 export const assets = {
   profile_icon,
@@ -30,4 +32,6 @@ export const assets = {
   download,
   white_arrow,
   home_icon,
+  comment_icon,
+  edit_icon,
 };
