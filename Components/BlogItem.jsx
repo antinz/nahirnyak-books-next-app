@@ -3,13 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 
 function BlogItem({ title, content, category, image, id, pdfUrl }) {
-  const prefix = "Послание к";
-  let displayTitle = title;
-
-  if (title.includes(prefix)) {
-    displayTitle = title.split(new RegExp(`\\s*${prefix}\\s*`))[1]; // Split using regex to trim spaces around prefix
-  }
-
   return (
     <div className="max-w-[330px] sm:max-w-[300px] w-full bg-white border border-black hover:shadow-[_7px_7px_0px_#000000] flex flex-col h-[530px]">
       <Link href={`/blogs/${id}`}>
@@ -22,8 +15,8 @@ function BlogItem({ title, content, category, image, id, pdfUrl }) {
             priority
           />
           {category === "Беседы о воле Божией" && (
-            <span className="absolute top-15 left-0 bg-opacity-60 text-white font-extrabold text-xl sm:text-3xl p-2 w-full text-center uppercase">
-              {displayTitle}
+            <span className="absolute top-5 left-0 bg-opacity-60 text-white font-extrabold text-3xl md:text-3xl p-2 w-full text-center uppercase">
+              {title}
             </span>
           )}
         </div>
