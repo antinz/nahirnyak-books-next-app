@@ -32,20 +32,26 @@ export async function GET(request) {
     if (chapterId) {
       const chapter = await ChapterModel.findById(chapterId);
 
-      const nextChapter = await ChapterModel.findOne({
-        blogId,
-        chapterNumber: chapter.chapterNumber + 1,
-      });
-
-      const prevChapter = await ChapterModel.findOne({
-        blogId,
-        chapterNumber: chapter.chapterNumber - 1,
-      });
+      const [nextChapter, prevChapter, firstChapter, lastChapter] =
+        await Promise.all([
+          ChapterModel.findOne({
+            blogId,
+            chapterNumber: chapter.chapterNumber + 1,
+          }),
+          ChapterModel.findOne({
+            blogId,
+            chapterNumber: chapter.chapterNumber - 1,
+          }),
+          ChapterModel.findOne({ blogId }).sort({ chapterNumber: 1 }),
+          ChapterModel.findOne({ blogId }).sort({ chapterNumber: -1 }),
+        ]);
 
       return NextResponse.json({
         currentChapter: chapter,
         nextChapter,
         prevChapter,
+        firstChapter,
+        lastChapter,
       });
     } else if (blogId) {
       const chapters = await ChapterModel.find({ blogId }).sort(
