@@ -5,8 +5,11 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-function page() {
+const ITEMS_PER_PAGE = 6;
+
+function Page() {
   const [blogs, setBlogs] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const fetchBlogs = async () => {
     try {
@@ -46,10 +49,15 @@ function page() {
   useEffect(() => {
     fetchBlogs();
   }, []);
+
+  const totalPages = Math.ceil(blogs.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedBlogs = blogs.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
   return (
     <div className="flex-1 pt-5 px-5 sm:pt-12 sm:pl-16">
       <h1 className="text-3xl font-semibold">Все книги</h1>
-      <div className="relative h-[80vh] max-w-[850px] overflow-x-auto mt-4 border border-gray-400 scrollbar-hide">
+      <div className="relative h-auto max-w-[850px] overflow-x-auto mt-4 border border-gray-400 scrollbar-hide mb-10">
         <table className="w-full text-sm text-gray-500">
           <thead className="text-sm text-gray-700 text-left uppercase bg-gray-50">
             <tr>
@@ -68,24 +76,38 @@ function page() {
             </tr>
           </thead>
           <tbody>
-            {blogs.map((item, i) => {
-              return (
-                <BlogTableItem
-                  key={i}
-                  mongoId={item._id}
-                  title={item.title}
-                  author={item.author}
-                  authorImg={item.authorImg}
-                  date={item.date}
-                  deleteBlog={() => deleteBlog(item._id, item.title)}
-                />
-              );
-            })}
+            {paginatedBlogs.map((item, i) => (
+              <BlogTableItem
+                key={item._id}
+                mongoId={item._id}
+                title={item.title}
+                author={item.author}
+                authorImg={item.authorImg}
+                date={item.date}
+                deleteBlog={() => deleteBlog(item._id, item.title)}
+              />
+            ))}
           </tbody>
         </table>
+      </div>
+
+      <div className="flex justify-center gap-2 mt-4 mr-80">
+        {Array.from({ length: totalPages }, (_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrentPage(i + 1)}
+            className={`px-3 flex items-center justify-center py-1 mb-10 border rounded ${
+              currentPage === i + 1
+                ? "bg-black text-white"
+                : "bg-white border-gray-400"
+            }`}
+          >
+            {i + 1}
+          </button>
+        ))}
       </div>
     </div>
   );
 }
 
-export default page;
+export default Page;

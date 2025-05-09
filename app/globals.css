@@ -10,18 +10,29 @@
 
 table {
 	border-collapse: collapse;
-	width: 100%;
+	font-family: Arial, sans-serif;
+	text-align: start;
+	align-items: start;
 }
-
 th,
 td {
 	border: 1px solid black;
-	padding: 8px;
-	text-align: left;
+	padding: 6px;
+	vertical-align: middle;
 }
-
-th {
-	background-color: #f2f2f2;
+.rotate {
+	writing-mode: vertical-rl;
+	transform: rotate(180deg);
+}
+.left-align {
+	text-align: left;
+	vertical-align: top;
+}
+.italic {
+	font-style: italic;
+}
+.description {
+	margin-top: 10px;
 }
 
 .blog-content,
