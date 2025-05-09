@@ -15,6 +15,7 @@ function BlogList() {
   const fetchBlogs = async () => {
     try {
       const res = await axios.get("/api/blog");
+
       if (res.data.success) {
         setBlogs(res.data.blogs);
       } else {
@@ -105,21 +106,30 @@ function BlogList() {
           <LoadingSpinner loading={loading} />
         </div>
       ) : (
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-          {blogs
-            .filter((item) => (menu === "Все" ? true : item.category === menu))
-            .map((item, i) => (
-              <BlogItem
-                key={i}
-                id={item._id}
-                image={item.image}
-                title={item.title}
-                description={item.description}
-                content={item.content}
-                category={item.category}
-                pdfUrl={item.pdfUrl}
-              />
-            ))}
+        <div className="max-w-7xl mx-auto mb-16">
+          {blogs.filter((item) => menu === "Все" || item.category === menu)
+            .length === 0 ? (
+            <p className="text-center text-gray-500 mt-10">
+              Здесь пока нет книг😢
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {blogs
+                .filter((item) => menu === "Все" || item.category === menu)
+                .map((item, i) => (
+                  <BlogItem
+                    key={i}
+                    id={item._id}
+                    image={item.image}
+                    title={item.title}
+                    description={item.description}
+                    content={item.content}
+                    category={item.category}
+                    pdfUrl={item.pdfUrl}
+                  />
+                ))}
+            </div>
+          )}
         </div>
       )}
     </div>
