@@ -50,6 +50,7 @@ function ChapterPage({ params }) {
   useEffect(() => {
     fetchChapters();
   }, [chapterId]);
+  console.log(chapterData);
 
   return loading ? (
     <LoadingSpinner loading={loading} />
@@ -78,7 +79,7 @@ function ChapterPage({ params }) {
 
         <div className="text-center mt-10 flex flex-col sm:flex-row flex-wrap gap-4 items-center justify-center">
           {chapterData.firstChapter && (
-            <Link href={`/blogs/${id}/${chapterData.firstChapter._id}`}>
+            <Link href={`/blogs/${id}`}>
               <button className="bg-white sm:text-2xl py-2 px-4 sm:py-3 sm:px-6 cursor-pointer">
                 ⏮
               </button>
@@ -86,7 +87,7 @@ function ChapterPage({ params }) {
           )}
           {chapterData.prevChapter && (
             <Link href={`/blogs/${id}/${chapterData.prevChapter._id}`}>
-              <button className="flex cursor-pointer items-center bg-white gap-2 font-medium py-2 px-4 sm:py-3 sm:px-6 border border-black shadow-[_7px_7px_0px_#000000]">
+              <button className="flex items-center bg-white gap-2 font-medium py-2 px-4 sm:py-3 sm:px-6 border border-black shadow-[_7px_7px_0px_#000000]">
                 <Image src={assets.arrow} alt="" /> Предыдущая
               </button>
             </Link>

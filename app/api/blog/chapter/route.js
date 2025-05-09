@@ -60,7 +60,10 @@ export async function GET(request) {
       return NextResponse.json(chapters);
     } else {
       const chapters = await ChapterModel.find();
-      return NextResponse.json(chapters);
+      return NextResponse.json({
+        chapters,
+        firstChapter: { _id: null, isBlogIntro: true },
+      });
     }
   } catch (error) {
     console.error(error);
