@@ -139,6 +139,7 @@ function page() {
           value={data.chapterNumber}
           type="number"
           required
+          disabled
           className="w-full sm:w-[250px] mt-4 px-4 py-3 border"
         />
 
