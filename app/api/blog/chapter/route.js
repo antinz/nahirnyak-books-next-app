@@ -61,6 +61,7 @@ export async function GET(request) {
     } else {
       const chapters = await ChapterModel.find();
       return NextResponse.json({
+        success: true,
         chapters,
         firstChapter: { _id: null, isBlogIntro: true },
       });

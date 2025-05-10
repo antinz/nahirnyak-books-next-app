@@ -110,7 +110,7 @@ function BlogList() {
           {blogs.filter((item) => menu === "Все" || item.category === menu)
             .length === 0 ? (
             <p className="text-center text-gray-500 mt-10">
-              Здесь пока нет книг😢
+              Здесь пока пусто😢
             </p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -10,11 +10,13 @@ function Page() {
   const [chapters, setChapters] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
+  console.log(chapters);
+
   const fetchChapters = async () => {
     try {
       const res = await axios.get("/api/blog/chapter");
-      if (res.data) {
-        setChapters(res.data.reverse());
+      if (res.data.success) {
+        setChapters(res.data.chapters.reverse());
       } else {
         toast.error("Не удалось загрузить главы");
       }

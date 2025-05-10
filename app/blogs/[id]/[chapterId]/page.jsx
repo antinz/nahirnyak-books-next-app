@@ -109,9 +109,9 @@ function ChapterPage({ params }) {
         </div>
         <Link
           href="/"
-          className="fixed bottom-4 right-2 sm:bottom-6 sm:right-6 z-50"
+          className="fixed bottom-4 right-2 sm:bottom-12 sm:right-12 z-50"
         >
-          <button className="bg-white p-2 sm:p-3 rounded-full shadow-lg hover:opacity-100 transition duration-200 cursor-pointer opacity-30">
+          <button className="bg-white p-2 sm:p-3 rounded-full shadow-lg hover:opacity-100 transition duration-200 cursor-pointer opacity-30 sm:opacity-100">
             <Image
               src={assets.home_icon}
               alt="Home"
