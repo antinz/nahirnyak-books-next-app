@@ -2,9 +2,9 @@ import { assets } from "/Assets/assets";
 import Image from "next/image";
 import Link from "next/link";
 
-function BlogItem({ title, content, category, image, id, pdfUrl }) {
+function BlogItem({ title, category, image, id, pdfUrl }) {
   return (
-    <div className="max-w-[330px] sm:max-w-[300px] w-full bg-white border border-black hover:shadow-[_7px_7px_0px_#000000] flex flex-col h-[530px]">
+    <div className="max-w-[330px] sm:max-w-[300px] w-full bg-white border border-black hover:shadow-[_7px_7px_0px_#000000] flex flex-col h-[430px]">
       <Link href={`/blogs/${id}`}>
         <div className="relative w-full h-[230px]">
           <Image
@@ -22,21 +22,17 @@ function BlogItem({ title, content, category, image, id, pdfUrl }) {
         </div>
       </Link>
 
-      <div className="flex flex-col justify-between flex-grow p-5">
+      <div className="flex flex-col justify-between flex-grow p-6">
         <div>
           <p className="mb-3 inline-block bg-black text-white text-sm px-2 py-1">
             {category}
           </p>
-          <h5 className="mb-2 text-lg font-medium tracking-tight text-gray-900 uppercase line-clamp-2">
+          <h5 className="mb-1 text-lg font-medium tracking-tight text-gray-900 uppercase line-clamp-2">
             {title}
           </h5>
-          <p
-            className="text-sm text-gray-700 break-words line-clamp-3"
-            dangerouslySetInnerHTML={{ __html: content.slice(0, 200) + "..." }}
-          ></p>
         </div>
 
-        <div className="flex items-center justify-between mt-5">
+        <div className="flex items-center justify-between mt-2">
           <Link
             href={`/blogs/${id}`}
             className="inline-flex items-center font-semibold text-center"
