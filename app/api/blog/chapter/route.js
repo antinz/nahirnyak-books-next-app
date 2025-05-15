@@ -9,13 +9,16 @@ const LoadDB = async () => {
 LoadDB();
 
 // API Endpoint to get all book chapters
+// API Endpoint to get chapters
 export async function GET(request) {
   try {
     const url = request.nextUrl;
     const blogId = url.searchParams.get("id");
     const chapterId = url.searchParams.get("chapterId");
     const latest = url.searchParams.get("latest");
+    const all = url.searchParams.get("all");
 
+    // ✅ Return only the last chapter number for a blog
     if (latest && blogId) {
       const latestChapter = await ChapterModel.findOne({ blogId })
         .sort({ chapterNumber: -1 })
@@ -29,6 +32,15 @@ export async function GET(request) {
       });
     }
 
+    // ✅ Return only all chapters for a blog (used for sidebar)
+    if (all === "true" && blogId) {
+      const chapters = await ChapterModel.find({ blogId }).sort(
+        "chapterNumber"
+      );
+      return NextResponse.json(chapters);
+    }
+
+    // ✅ Return a specific chapter with navigation
     if (chapterId) {
       const chapter = await ChapterModel.findById(chapterId);
 
@@ -53,19 +65,15 @@ export async function GET(request) {
         firstChapter,
         lastChapter,
       });
-    } else if (blogId) {
-      const chapters = await ChapterModel.find({ blogId }).sort(
-        "chapterNumber"
-      );
-      return NextResponse.json(chapters);
-    } else {
-      const chapters = await ChapterModel.find();
-      return NextResponse.json({
-        success: true,
-        chapters,
-        firstChapter: { _id: null, isBlogIntro: true },
-      });
     }
+
+    // ✅ Return all chapters (fallback if no query provided)
+    const chapters = await ChapterModel.find();
+    return NextResponse.json({
+      success: true,
+      chapters,
+      firstChapter: { _id: null, isBlogIntro: true },
+    });
   } catch (error) {
     console.error(error);
     return NextResponse.json({

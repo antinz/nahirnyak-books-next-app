@@ -37,16 +37,17 @@ function Page({ params }) {
       const res = await axios.get("/api/blog/chapter", {
         params: {
           id: unwrappedParams.id,
-          chapterId: unwrappedParams.chapterId,
+          all: true,
         },
       });
       setChapterData(res.data);
     } catch (err) {
-      console.error("Failed to load chapter", err);
+      console.error("Failed to load chapters", err);
     } finally {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     fetchChapters();
   }, []);
