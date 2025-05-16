@@ -48,6 +48,20 @@ function Sidebar() {
             <Image src={assets.email_icon} alt="" width={28} />
             <p>Подписки</p>
           </Link>
+          <Link
+            href="/admin/editChapter"
+            className="mt-5 flex items-center border border-black gap-3 font-medium px-3 py-2 bg-white shadow-[_-5px_5px_0px_#000000]"
+          >
+            <Image src={assets.edit_icon} alt="" width={28} />
+            <p>Редактировать главу</p>
+          </Link>
+          <Link
+            href="/admin/editBlog"
+            className="mt-5 flex items-center border border-black gap-3 font-medium px-3 py-2 bg-white shadow-[_-5px_5px_0px_#000000]"
+          >
+            <Image src={assets.edit_icon} alt="" width={28} />
+            <p>Редактировать книгу</p>
+          </Link>
         </div>
       </div>
     </div>

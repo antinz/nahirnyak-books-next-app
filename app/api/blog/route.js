@@ -110,3 +110,93 @@ export async function DELETE(request) {
     return NextResponse.json({ success: false, message: error.message });
   }
 }
+
+export async function PUT(request) {
+  try {
+    const blogId = request.nextUrl.searchParams.get("id");
+    if (!blogId) {
+      return NextResponse.json(
+        { success: false, message: "ID блога не предоставлен" },
+        { status: 400 }
+      );
+    }
+
+    const contentType = request.headers.get("content-type") || "";
+    if (contentType.includes("application/json")) {
+      const body = await request.json();
+      const updateFields = {
+        ...(body.title && { title: body.title }),
+        ...(body.description && { description: body.description }),
+        ...(body.content && { content: body.content }),
+      };
+
+      const updatedBlog = await BlogModel.findByIdAndUpdate(
+        blogId,
+        updateFields,
+        { new: true }
+      );
+      return updatedBlog
+        ? NextResponse.json({ success: true, updatedBlog })
+        : NextResponse.json(
+            { success: false, message: "Блог не найден" },
+            { status: 404 }
+          );
+    }
+
+    // Handle multipart/form-data
+    const formData = await request.formData();
+    const title = formData.get("title");
+    const description = formData.get("description");
+    const content = formData.get("content");
+    const image = formData.get("image");
+
+    const blog = await BlogModel.findById(blogId);
+    if (!blog) {
+      return NextResponse.json(
+        { success: false, message: "Блог не найден" },
+        { status: 404 }
+      );
+    }
+
+    const updateFields = { title, description, content };
+
+    // If new image provided
+    if (image && typeof image === "object") {
+      const arrayBuffer = await image.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+
+      // Remove old image if exists
+      if (blog.imagePublicId) {
+        await cloudinary.uploader.destroy(blog.imagePublicId);
+      }
+
+      const uploadResult = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { resource_type: "auto" },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        );
+        uploadStream.end(buffer);
+      });
+
+      updateFields.image = uploadResult.secure_url;
+      updateFields.imagePublicId = uploadResult.public_id;
+    }
+
+    const updatedBlog = await BlogModel.findByIdAndUpdate(
+      blogId,
+      updateFields,
+      { new: true }
+    );
+
+    return NextResponse.json({ success: true, updatedBlog });
+  } catch (error) {
+    console.error("PUT Blog Error:", error);
+    return NextResponse.json(
+      { success: false, message: "Ошибка при обновлении блога" },
+      { status: 500 }
+    );
+  }
+}

@@ -111,7 +111,7 @@ function page() {
           onChange={onChangeHandler}
           value={data.subTitle}
           type="text"
-          placeholder="Введите название книги"
+          placeholder="Введите подзаголовок книги"
           className="w-full sm:w-[1000px] mt-4 px-4 py-3 border"
         />
 
@@ -124,7 +124,7 @@ function page() {
           placeholder="Введите описание..."
           required
           className="w-full sm:w-[1000px] mt-4 px-4 py-3 border"
-          rows={4}
+          rows={10}
         />
         <p className="text-xl mt-4">
           Содержание книги (первая глава или пролог)
@@ -137,7 +137,7 @@ function page() {
           placeholder="Начните писать..."
           required
           className="w-full sm:w-[1000px] mt-4 px-4 py-3 border"
-          rows={15}
+          rows={20}
         />
         <p className="text-xl mt-4">Категория книги</p>
         <select

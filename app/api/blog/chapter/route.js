@@ -147,3 +147,38 @@ export async function DELETE(request) {
     );
   }
 }
+
+export async function PUT(request) {
+  try {
+    const chapterId = request.nextUrl.searchParams.get("id");
+    const body = await request.json();
+
+    const updatedChapter = await ChapterModel.findByIdAndUpdate(
+      chapterId,
+      {
+        title: body.title,
+        content: body.content,
+        blogId: body.blogId,
+        blogTitle: body.blogTitle,
+        chapterNumber: body.chapterNumber,
+        footnotes: body.footnotes,
+      },
+      { new: true }
+    );
+
+    if (!updatedChapter) {
+      return NextResponse.json(
+        { success: false, message: "Глава не найдена" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({ success: true, updatedChapter });
+  } catch (error) {
+    console.error("PUT Chapter Error:", error);
+    return NextResponse.json(
+      { success: false, message: "Ошибка при обновлении главы" },
+      { status: 500 }
+    );
+  }
+}

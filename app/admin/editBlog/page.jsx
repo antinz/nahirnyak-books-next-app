@@ -1,0 +1,166 @@
+"use client";
+
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+
+function EditBlogPage() {
+  const [blogs, setBlogs] = useState([]);
+  const [selectedBlogId, setSelectedBlogId] = useState("");
+
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [content, setContent] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
+  const [image, setImage] = useState(null);
+  const [currentImage, setCurrentImage] = useState(""); // to preview current
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const res = await axios.get("/api/blog");
+        if (res.data.success && Array.isArray(res.data.blogs)) {
+          setBlogs(res.data.blogs);
+        }
+      } catch (err) {
+        console.error("Ошибка при загрузке списка книг", err);
+        toast.error("Ошибка при загрузке списка книг");
+      }
+    };
+    fetchBlogs();
+  }, []);
+
+  useEffect(() => {
+    if (!selectedBlogId) return;
+
+    const fetchBlogDetails = async () => {
+      try {
+        const res = await axios.get(`/api/blog?id=${selectedBlogId}`);
+        const blog = res.data;
+        setTitle(blog.title || "");
+        setDescription(blog.description || "");
+        setContent(blog.content || "");
+        setCurrentImage(blog.image || "");
+      } catch (err) {
+        console.error("Ошибка при загрузке книги", err);
+        toast.error("Ошибка при загрузке книги");
+      }
+    };
+
+    fetchBlogDetails();
+  }, [selectedBlogId]);
+
+  const handleSave = async () => {
+    if (!selectedBlogId) return;
+    setIsSaving(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("description", description);
+      formData.append("content", content);
+      if (image) formData.append("image", image); // optional
+
+      const res = await axios.put(`/api/blog?id=${selectedBlogId}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      if (res.data.success) {
+        toast.success("Изменения успешно сохранены");
+      } else {
+        toast.error(res.data.message || "Не удалось сохранить изменения");
+      }
+    } catch (error) {
+      console.error("Ошибка при сохранении изменений", error);
+      toast.error("Ошибка при сохранении");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  return (
+    <div className="p-5">
+      <h1 className="text-2xl font-bold text-center">Редактировать книгу</h1>
+      <h2 className="text-xl font-semibold mb-4">Выберите книгу</h2>
+
+      <select
+        value={selectedBlogId}
+        onChange={(e) => setSelectedBlogId(e.target.value)}
+        className="w-full sm:w-[1000px] border px-4 py-3 text-gray-700"
+      >
+        <option value="" disabled>
+          -- Выберите книгу --
+        </option>
+        {blogs.map((blog) => (
+          <option key={blog._id} value={blog._id}>
+            {blog.title}
+          </option>
+        ))}
+      </select>
+
+      {selectedBlogId && (
+        <>
+          <div className="mt-6">
+            <p className="text-lg font-medium">Название книги</p>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Название книги"
+              className="mt-2 w-full sm:w-[1000px] px-4 py-3 border"
+            />
+          </div>
+
+          <div className="mt-6">
+            <p className="text-lg font-medium">Изображение книги</p>
+            {(image || currentImage) && (
+              <img
+                src={image ? URL.createObjectURL(image) : currentImage}
+                alt="Текущее изображение"
+                className="w-40 h-auto mt-4"
+              />
+            )}
+            <input
+              type="file"
+              onChange={(e) => setImage(e.target.files[0])}
+              className="mt-2"
+            />
+          </div>
+
+          <div className="mt-6">
+            <p className="text-lg font-medium">Описание книги</p>
+            <textarea
+              type="text"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Описание"
+              className="w-full sm:w-[1000px] mt-4 px-4 py-3 border"
+              rows={6}
+            />
+          </div>
+
+          <div className="mt-6">
+            <p className="text-lg font-medium">Содержание</p>
+            <textarea
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              placeholder="Содержание"
+              className="w-full sm:w-[1000px] mt-4 px-4 py-3 border"
+              rows={15}
+            />
+          </div>
+
+          <button
+            onClick={handleSave}
+            disabled={isSaving}
+            className="mt-6 px-6 py-3 bg-black text-white rounded hover:bg-gray-800 disabled:opacity-50"
+          >
+            {isSaving ? "Сохранение..." : "Сохранить изменения"}
+          </button>
+        </>
+      )}
+    </div>
+  );
+}
+
+export default EditBlogPage;
