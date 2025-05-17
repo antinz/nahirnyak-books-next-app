@@ -14,6 +14,7 @@ function EditBlogPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [image, setImage] = useState(null);
   const [currentImage, setCurrentImage] = useState(""); // to preview current
+  const [category, setCategory] = useState("");
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -41,6 +42,7 @@ function EditBlogPage() {
         setDescription(blog.description || "");
         setContent(blog.content || "");
         setCurrentImage(blog.image || "");
+        setCategory(blog.category || "");
       } catch (err) {
         console.error("Ошибка при загрузке книги", err);
         toast.error("Ошибка при загрузке книги");
@@ -59,6 +61,7 @@ function EditBlogPage() {
       formData.append("title", title);
       formData.append("description", description);
       formData.append("content", content);
+      formData.append("category", category);
       if (image) formData.append("image", image); // optional
 
       const res = await axios.put(`/api/blog?id=${selectedBlogId}`, formData, {
@@ -148,6 +151,27 @@ function EditBlogPage() {
               className="w-full sm:w-[1000px] mt-4 px-4 py-3 border"
               rows={15}
             />
+          </div>
+          <div className="mt-6">
+            <p className="text-lg font-medium">Категория книги</p>
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              required
+              className="w-60 mt-4 px-4 py-3 border text-gray-500"
+            >
+              <option value="" disabled>
+                -- Выберите категорию --
+              </option>
+              <option value="Христианские рассказы">
+                Христианские рассказы
+              </option>
+              <option value="Богословие">Богословие</option>
+              <option value="Беседы о воле Божией">Беседы о воле Божией</option>
+              <option value="Брак и семья">Брак и семья</option>
+              <option value="Для служителей">Для служителей</option>
+              <option value="Проповеди и статьи">Проповеди и статьи</option>
+            </select>
           </div>
 
           <button

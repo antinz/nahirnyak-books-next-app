@@ -128,6 +128,7 @@ export async function PUT(request) {
         ...(body.title && { title: body.title }),
         ...(body.description && { description: body.description }),
         ...(body.content && { content: body.content }),
+        ...(body.category && { category: body.category }),
       };
 
       const updatedBlog = await BlogModel.findByIdAndUpdate(
@@ -149,6 +150,7 @@ export async function PUT(request) {
     const description = formData.get("description");
     const content = formData.get("content");
     const image = formData.get("image");
+    const category = formData.get("category");
 
     const blog = await BlogModel.findById(blogId);
     if (!blog) {
@@ -158,7 +160,7 @@ export async function PUT(request) {
       );
     }
 
-    const updateFields = { title, description, content };
+    const updateFields = { title, description, content, category };
 
     // If new image provided
     if (image && typeof image === "object") {

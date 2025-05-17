@@ -7,13 +7,16 @@ function BlogItem({ title, category, image, id, pdfUrl }) {
     <div className="max-w-[330px] sm:max-w-[300px] w-full bg-white border border-black hover:shadow-[_7px_7px_0px_#000000] flex flex-col h-[430px]">
       <Link href={`/blogs/${id}`}>
         <div className="relative w-full h-[230px]">
-          <Image
-            src={image}
-            alt=""
-            fill
-            className="object-cover w-full h-full border-black border-b"
-            priority
-          />
+          {image ? (
+            <Image
+              src={image}
+              alt=""
+              fill
+              className="object-cover w-full h-full border-black border-b"
+              priority
+            />
+          ) : null}
+
           {category === "Беседы о воле Божией" && (
             <span className="absolute top-5 left-0 bg-opacity-60 text-white font-extrabold text-3xl md:text-3xl p-2 w-full text-center uppercase">
               {title}
