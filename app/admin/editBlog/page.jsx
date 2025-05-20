@@ -9,6 +9,7 @@ function EditBlogPage() {
   const [selectedBlogId, setSelectedBlogId] = useState("");
 
   const [title, setTitle] = useState("");
+  const [subTitle, setSubTitle] = useState("");
   const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
   const [isSaving, setIsSaving] = useState(false);
@@ -43,6 +44,7 @@ function EditBlogPage() {
         setContent(blog.content || "");
         setCurrentImage(blog.image || "");
         setCategory(blog.category || "");
+        setSubTitle(blog.subTitle || "");
       } catch (err) {
         console.error("Ошибка при загрузке книги", err);
         toast.error("Ошибка при загрузке книги");
@@ -62,6 +64,7 @@ function EditBlogPage() {
       formData.append("description", description);
       formData.append("content", content);
       formData.append("category", category);
+      formData.append("subTitle", subTitle);
       if (image) formData.append("image", image); // optional
 
       const res = await axios.put(`/api/blog?id=${selectedBlogId}`, formData, {
@@ -110,6 +113,16 @@ function EditBlogPage() {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Название книги"
+              className="mt-2 w-full sm:w-[1000px] px-4 py-3 border"
+            />
+          </div>
+          <div className="mt-6">
+            <p className="text-lg font-medium">Подзаголовок книги</p>
+            <input
+              type="text"
+              value={subTitle}
+              onChange={(e) => setSubTitle(e.target.value)}
+              placeholder="Подзаголовок книги"
               className="mt-2 w-full sm:w-[1000px] px-4 py-3 border"
             />
           </div>
