@@ -8,6 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { use, useEffect, useState } from "react";
 import { renderContentWithInlineFootnotesForBlogPage } from "/utils/renderContentWithInlineFootnotesForBlogPage";
+import { toast } from "react-toastify";
 
 function Page({ params }) {
   const unwrappedParams = use(params);
@@ -24,12 +25,19 @@ function Page({ params }) {
   };
 
   const fetchBlogData = async () => {
-    const res = await axios.get("/api/blog", {
-      params: {
-        id: unwrappedParams.id,
-      },
-    });
-    setData(res.data);
+    try {
+      setLoading(true);
+      const res = await axios.get("/api/blog", {
+        params: {
+          id: unwrappedParams.id,
+        },
+      });
+      setData(res.data);
+    } catch (err) {
+      toast.error("Не удалось загрузить книгу");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const fetchChapters = async () => {
@@ -42,19 +50,15 @@ function Page({ params }) {
       });
       setChapterData(res.data);
     } catch (err) {
-      console.error("Failed to load chapters", err);
+      toast.error("Не удалось загрузить главу");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchChapters();
-  }, []);
-
-  useEffect(() => {
     fetchBlogData();
-    setLoading(false);
+    fetchChapters();
   }, []);
 
   return loading ? (

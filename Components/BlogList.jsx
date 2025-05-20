@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import BlogItem from "./BlogItem.jsx";
 import axios from "axios";
 import LoadingSpinner from "./LoadingSpinner.jsx";
@@ -42,6 +42,51 @@ function BlogList() {
     "Для служителей",
     "Проповеди и статьи",
   ];
+
+  const sortedFilteredBlogs = useMemo(() => {
+    const filtered = blogs.filter(
+      (item) => menu === "Все" || item.category === menu
+    );
+
+    if (menu === "Беседы о воле Божией") {
+      const desiredOrder = [
+        "Послание Иакова",
+        "1-е Послание Петра",
+        "2-е Послание Петра",
+        "1-е Послание Иоанна",
+        "2-е Послание Иоанна",
+        "3-е Послание Иоанна",
+        "Послание Иуды",
+        "Послание к Римлянам Часть 1",
+        "Послание к Римлянам Часть 2",
+        "Послание к Римлянам Часть 3",
+        "Послание к Римлянам Часть 4",
+        "1-е Послание к Коринфянам Часть 1",
+        "1-е Послание  к Коринфянам Часть 2",
+        "1-е Послание к Коринфянам Часть 3",
+        "2-е Послание к Коринфянам Часть 1",
+        "2-е Послание к Коринфянам Часть 2",
+        "Послание к Галатам",
+        "Послание к Ефесянам",
+        "Послание к Филиппийцам",
+        "Послание к Колоссянам",
+        "1-е Послание к Фессалоникийцам",
+        "2-е Послание к Фессалоникийцам",
+        "1-е Послание к Тимофею",
+        "2-е Послание к Тимофею",
+        "Послание к Титу",
+        "Послание к Филимону",
+        "Послание к Евреям Часть 1",
+        "Послание к Евреям Часть 2",
+      ];
+
+      return filtered.sort(
+        (a, b) => desiredOrder.indexOf(a.title) - desiredOrder.indexOf(b.title)
+      );
+    }
+
+    return filtered;
+  }, [blogs, menu]);
 
   return (
     <div className="px-4 sm:px-8">
@@ -106,19 +151,17 @@ function BlogList() {
           <LoadingSpinner loading={loading} />
         </div>
       ) : (
-        <div className="max-w-7xl mx-auto mb-16">
-          {blogs.filter((item) => menu === "Все" || item.category === menu)
-            .length === 0 ? (
-            <p className="text-center text-gray-500 mt-10">
-              Здесь пока пусто😢
-            </p>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {blogs
-                .filter((item) => menu === "Все" || item.category === menu)
-                .map((item, i) => (
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="max-w-7xl mb-16">
+            {sortedFilteredBlogs.length === 0 ? (
+              <p className="text-center text-gray-500 mt-10">
+                Здесь пока пусто😢
+              </p>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-6 gap-x-20">
+                {sortedFilteredBlogs.map((item) => (
                   <BlogItem
-                    key={i}
+                    key={item._id}
                     id={item._id}
                     image={item.image}
                     title={item.title}
@@ -128,8 +171,9 @@ function BlogList() {
                     pdfUrl={item.pdfUrl}
                   />
                 ))}
-            </div>
-          )}
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>

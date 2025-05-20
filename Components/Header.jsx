@@ -30,12 +30,12 @@ function Header() {
   };
 
   return (
-    <div className="py-5 px-4 sm:px-6 md:px-12 lg:px-28">
+    <div className="py-1 px-4 sm:px-6 md:px-12 lg:px-28">
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-        <Image src={assets.logo} alt="logo" width={200} height={200} />
+        <Image src={assets.logo} alt="logo" width={150} height={150} />
         <form
           onSubmit={onSubmitHandler}
-          className="flex flex-col hidden sm:flex-row items-stretch sm:items-center max-w-[650px] border border-black shadow-[_7px_7px_0px_#000000] bg-white"
+          className="flex hidden sm:block flex-col sm:flex-row items-stretch sm:items-center max-w-[650px] border border-black shadow-[_7px_7px_0px_#000000] bg-white"
         >
           <input
             onChange={(e) => setEmail(e.target.value)}
@@ -54,7 +54,7 @@ function Header() {
         </form>
       </div>
 
-      <div className="text-center my-8">
+      <div className="text-center sm:mt-1 mb-8">
         <h1 className="text-2xl sm:text-4xl md:text-5xl font-medium leading-tight">
           Книги Михаила Нагирняка
         </h1>
