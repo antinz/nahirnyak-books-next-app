@@ -122,7 +122,6 @@ function page() {
           value={data.description}
           type="text"
           placeholder="Введите описание..."
-          required
           className="w-full sm:w-[1000px] mt-4 px-4 py-3 border"
           rows={10}
         />

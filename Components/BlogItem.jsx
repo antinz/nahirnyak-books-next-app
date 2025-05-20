@@ -22,6 +22,11 @@ function BlogItem({ title, category, image, id, pdfUrl }) {
               {title}
             </span>
           )}
+          {category === "Проповеди и статьи" && (
+            <span className="absolute top-5 left-0 bg-opacity-60 text-white font-extrabold text-2xl md:text-2xl p-2 w-full text-center italic uppercase">
+              {title}
+            </span>
+          )}
         </div>
       </Link>
 
