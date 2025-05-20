@@ -151,7 +151,7 @@ function BlogList() {
           <LoadingSpinner loading={loading} />
         </div>
       ) : (
-        <div className="flex items-center justify-center min-h-screen">
+        <div className="flex items-center justify-center">
           <div className="max-w-7xl mb-16">
             {sortedFilteredBlogs.length === 0 ? (
               <p className="text-center text-gray-500 mt-10">
