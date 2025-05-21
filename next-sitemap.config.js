@@ -1,4 +1,5 @@
 module.exports = {
-  siteUrl: 'https://mihailnahirniak.blog', // Use your real domain
+  siteUrl: "https://mihailnahirniak.blog",
   generateRobotsTxt: true,
-}
+  exclude: ["/admin", "/admin/**"],
+};
