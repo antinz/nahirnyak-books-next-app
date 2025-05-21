@@ -9,26 +9,25 @@ const outfit = Outfit({
 export const metadata = {
   title: "Книги Михаила Нагирняка",
   description:
-    "Христианские книги, основанные на баптистском вероучении. Глубокие библейские размышления, духовное наставление и вдохновляющие тексты для укрепления веры.",
+    "Христианские книги, основанные на баптистском вероучении. Глубокие библейские размышления, духовное наставление и вдохновляющие тексты для укрепления веры",
   keywords: [
     "христианские книги",
     "баптисты",
     "библейские главы",
     "духовное наставление",
     "христианская литература",
-    "дары святого духа",
   ],
   icons: {
-    icon: "/favicon.ico",
+    icon: "/favicon.svg",
     apple: "/apple-touch-icon.png",
-    shortcut: "/favicon.ico",
+    shortcut: "/favicon.svg",
   },
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="ru">
-      <body className={outfit.className}>{children}</body>
+      <body className={`${outfit.variable}`}>{children}</body>
     </html>
   );
 }
