@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://mihailnahirniak.blog
+
+# Sitemaps
+Sitemap: https://mihailnahirniak.blog/sitemap.xml
