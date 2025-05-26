@@ -33,7 +33,7 @@ export function renderContentWithInlineFootnotes(
         } else {
           return (
             <sup
-              className="relative text-blue-600 underline cursor-pointer"
+              className="relative text-blue-600 underline cursor-pointer mx-2"
               onClick={() => toggleFootnote(footnoteIndex)}
               title="Нажмите, чтобы показать сноску"
             >
