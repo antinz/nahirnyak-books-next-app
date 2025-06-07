@@ -345,8 +345,8 @@ td {
 }
 /* Continue if deeper levels exist */
 
-.ql-video {
-	width: 100% !important;
+.quill-content .ql-video {
+	width: 150% !important;
 	max-width: 100% !important;
 	height: auto !important;
 	aspect-ratio: 16 / 9;
