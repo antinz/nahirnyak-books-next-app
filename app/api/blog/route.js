@@ -83,16 +83,28 @@ export async function POST(request) {
           message: "No image uploaded",
         });
       }
-      if (typeof imageFile !== "string") {
+
+      if (typeof imageFile === "string") {
+        // Reject if someone passed a string for custom upload (should be File)
         return NextResponse.json({
           success: false,
-          message: "Unsupported image format",
+          message: "Expected file upload, got string.",
         });
       }
 
-      // Upload the image (base64 string) to Cloudinary
-      const uploadResult = await cloudinary.uploader.upload(imageFile, {
-        resource_type: "auto",
+      const arrayBuffer = await imageFile.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+
+      // Upload to Cloudinary using buffer
+      const uploadResult = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { resource_type: "image" },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        );
+        uploadStream.end(buffer);
       });
 
       imgUrl = uploadResult.secure_url;

@@ -152,31 +152,29 @@ function BlogList() {
           <LoadingSpinner loading={loading} />
         </div>
       ) : (
-        <div className="flex items-center justify-center">
-          <div className="max-w-7xl mb-16">
-            {sortedFilteredBlogs.length === 0 ? (
-              <p className="text-center text-gray-500 mt-10">
-                Здесь пока пусто😢
-              </p>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-6 gap-x-20">
-                {sortedFilteredBlogs.map((item) => (
-                  <BlogItem
-                    key={item._id}
-                    id={item._id}
-                    image={item.image}
-                    title={item.title}
-                    description={item.description}
-                    content={item.content}
-                    category={item.category}
-                    pdfUrl={item.pdfUrl}
-                    views={item.views}
-                    likes={item.likes}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
+        <div className="max-w-7xl mx-auto mb-16 px-4">
+          {sortedFilteredBlogs.length === 0 ? (
+            <p className="text-center text-gray-500 mt-10">
+              Здесь пока пусто😢
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-6 gap-x-20">
+              {sortedFilteredBlogs.map((item) => (
+                <BlogItem
+                  key={item._id}
+                  id={item._id}
+                  image={item.image}
+                  title={item.title}
+                  description={item.description}
+                  content={item.content}
+                  category={item.category}
+                  pdfUrl={item.pdfUrl}
+                  views={item.views}
+                  likes={item.likes}
+                />
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -109,17 +109,24 @@ function Page({ params }) {
           </p>
         </div>
       </div>
-      <div className="mx-5 max-w-[800px] md:mx-auto mt-[-100px] mb-10">
-        <div className="relative">
-          <Image
-            src={data.image}
-            width={1280}
-            height={720}
-            alt=""
-            className="border-4 border-white w-full h-auto sm:h-[550px] object-cover"
-            priority
-          />
-        </div>
+      <div
+        className={`mx-5 max-w-[800px] md:mx-auto mb-10 ${
+          data.category === "Видео-проповеди" ? "mt-[0px]" : "mt-[-100px]"
+        }`}
+      >
+        {!data.category === "Видео-проповеди" && (
+          <div className="relative">
+            <Image
+              src={data.image}
+              width={1280}
+              height={720}
+              alt=""
+              className="border-4 border-white w-full h-auto sm:h-[550px] object-cover"
+              priority
+            />
+          </div>
+        )}
+
         <div className="quill-description px-4 sm:px-6 md:px-8 lg:px-0">
           <div
             className="quill-description"

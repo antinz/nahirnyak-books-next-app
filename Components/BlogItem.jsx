@@ -60,6 +60,11 @@ function BlogItem({ title, category, image, id, pdfUrl, views, likes }) {
             {title}
           </span>
         )}
+        {category === "Видео-проповеди" && (
+          <span className="absolute top-5 left-0 bg-opacity-60 text-white font-extrabold text-2xl md:text-2xl p-2 w-full text-center italic uppercase">
+            {title}
+          </span>
+        )}
       </div>
 
       <div className="flex flex-col justify-between flex-grow p-6">
@@ -77,7 +82,7 @@ function BlogItem({ title, category, image, id, pdfUrl, views, likes }) {
             href={`/blogs/${id}`}
             className="inline-flex items-center font-semibold text-center"
           >
-            Читать{" "}
+            {category === "Видео-проповеди" ? "Смотреть " : "Читать "}
             <Image
               src={assets.right_arrow}
               alt=">"
