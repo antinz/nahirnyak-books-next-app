@@ -3,6 +3,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import dynamic from "next/dynamic";
+
+const RichTextEditor = dynamic(
+  () => import("../../../Components/AdminComponents/textEditor"),
+  {
+    ssr: false,
+  }
+);
 
 function EditChapterForm() {
   const [blogs, setBlogs] = useState([]);
@@ -12,6 +20,7 @@ function EditChapterForm() {
 
   const [chapterTitle, setChapterTitle] = useState("");
   const [chapterContent, setChapterContent] = useState("");
+  const [resetKey, setResetKey] = useState(0);
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -38,6 +47,7 @@ function EditChapterForm() {
         setSelectedChapterId("");
         setChapterTitle("");
         setChapterContent("");
+        setResetKey((prev) => prev + 1);
       } catch (err) {
         console.error("Ошибка при загрузке глав", err);
       }
@@ -138,11 +148,13 @@ function EditChapterForm() {
 
           <div className="mt-6">
             <p className="text-lg font-medium">Содержание главы</p>
-            <textarea
+            {/* Optional toolbar container if needed */}
+            <div id="toolbar-chapter-content" className="quill-toolbar"></div>
+            <RichTextEditor
+              key={`content-${resetKey}`}
               value={chapterContent}
-              onChange={(e) => setChapterContent(e.target.value)}
-              rows={15}
-              className="w-full sm:w-[1000px] mt-4 px-4 py-3 border"
+              onChange={setChapterContent}
+              toolbarId="toolbar-chapter-content"
             />
           </div>
 

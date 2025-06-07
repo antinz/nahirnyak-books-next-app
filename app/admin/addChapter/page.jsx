@@ -1,9 +1,17 @@
 "use client";
 
 import axios from "axios";
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { extractFootnotesFromHtml } from "../../../utils/extractFootnotes.js";
+
+const RichTextEditor = dynamic(
+  () => import("../../../Components/AdminComponents/textEditor"),
+  {
+    ssr: false,
+  }
+);
 
 function page() {
   const [data, setData] = useState({
@@ -15,6 +23,7 @@ function page() {
   });
   const [blogTitles, setBlogTitles] = useState([]);
   const [footnotes, setFootnotes] = useState([]);
+  const [resetKey, setResetKey] = useState(0);
 
   const onChangeHandler = async (e) => {
     const name = e.target.name;
@@ -82,6 +91,7 @@ function page() {
           content: "",
           chapterNumber: 1,
         });
+        setResetKey((prev) => prev + 1);
       } else {
         toast.error(res.data.message || "Ошибка при добавлении");
       }
@@ -143,16 +153,12 @@ function page() {
           className="w-full sm:w-[250px] mt-4 px-4 py-3 border"
         />
 
-        <p className="text-xl mt-4">Содержание главы</p>
-        <textarea
-          name="content"
-          onChange={onChangeHandler}
+        <p className="text-xl mt-4 mb-4">Содержание главы</p>
+        <RichTextEditor
+          key={`content-${resetKey}`}
           value={data.content}
-          type="text"
-          placeholder="Введите содержание..."
-          required
-          className="w-full sm:w-[1000px] mt-4 px-4 py-3 border"
-          rows={15}
+          onChange={(value) => setData({ ...data, content: value })}
+          toolbarId="toolbar-content"
         />
         <br />
         <button

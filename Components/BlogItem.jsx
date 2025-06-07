@@ -1,41 +1,73 @@
 import { assets } from "/Assets/assets";
 import Image from "next/image";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 
-function BlogItem({ title, category, image, id, pdfUrl }) {
+function BlogItem({ title, category, image, id, pdfUrl, views, likes }) {
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(likes || 0);
+  function getDriveDownloadLink(shareUrl) {
+    if (!shareUrl) return null;
+
+    const match = shareUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+    if (match && match[1]) {
+      const fileId = match[1];
+      return `https://drive.google.com/uc?export=download&id=${fileId}`;
+    }
+
+    return shareUrl;
+  }
+
+  useEffect(() => {
+    const fingerprint = localStorage.getItem(`liked-${id}`);
+    if (fingerprint === "true") setLiked(true);
+  }, [id]);
+
+  const handleLikeToggle = async () => {
+    const action = liked ? "unlike" : "like";
+    const res = await fetch(`/api/blog?id=${id}&action=${action}`, {
+      method: "PATCH",
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      setLiked(!liked);
+      setLikeCount(data.likes);
+      localStorage.setItem(`liked-${id}`, !liked);
+    }
+  };
+
   return (
     <div className="max-w-[330px] sm:max-w-[300px] w-full bg-white border border-black hover:shadow-[_7px_7px_0px_#000000] flex flex-col h-[430px]">
-      <Link href={`/blogs/${id}`}>
-        <div className="relative w-full h-[230px]">
-          {image ? (
-            <Image
-              src={image}
-              alt=""
-              fill
-              className="object-cover w-full h-full border-black border-b"
-              priority
-            />
-          ) : null}
+      <div className="relative w-full h-[230px]">
+        {image ? (
+          <Image
+            src={image}
+            alt=""
+            fill
+            className="object-cover w-full h-full border-black border-b"
+            priority
+          />
+        ) : null}
 
-          {category === "Беседы о воле Божией" && (
-            <span className="absolute top-5 left-0 bg-opacity-60 text-white font-extrabold text-3xl md:text-3xl p-2 w-full text-center uppercase">
-              {title}
-            </span>
-          )}
-          {category === "Проповеди и статьи" && (
-            <span className="absolute top-5 left-0 bg-opacity-60 text-white font-extrabold text-2xl md:text-2xl p-2 w-full text-center italic uppercase">
-              {title}
-            </span>
-          )}
-        </div>
-      </Link>
+        {category === "Беседы о воле Божией" && (
+          <span className="absolute top-5 left-0 bg-opacity-60 text-white font-extrabold text-3xl md:text-3xl p-2 w-full text-center uppercase">
+            {title}
+          </span>
+        )}
+        {category === "Проповеди и статьи" && (
+          <span className="absolute top-5 left-0 bg-opacity-60 text-white font-extrabold text-2xl md:text-2xl p-2 w-full text-center italic uppercase">
+            {title}
+          </span>
+        )}
+      </div>
 
       <div className="flex flex-col justify-between flex-grow p-6">
         <div>
           <p className="mb-3 inline-block bg-black text-white text-sm px-2 py-1">
             {category}
           </p>
-          <h5 className="mb-1 text-lg font-medium tracking-tight text-gray-900 uppercase line-clamp-2">
+          <h5 className="mb-1 text-lg font-medium tracking-tight text-gray-900 uppercase line-clamp-2 break-words">
             {title}
           </h5>
         </div>
@@ -53,17 +85,46 @@ function BlogItem({ title, category, image, id, pdfUrl }) {
               className="ml-2"
             />
           </Link>
-          {pdfUrl && (
-            <a
-              href={pdfUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block"
-              title="Открыть книгу в PDF"
+
+          <div className="flex items-center space-x-4">
+            {/* Likes */}
+            <div
+              className="flex items-center space-x-1 text-gray-700 cursor-pointer"
+              title="Likes"
+              onClick={handleLikeToggle}
             >
-              <Image src={assets.download} alt="Читать PDF" width={20} />
-            </a>
-          )}
+              <Image
+                src={liked ? assets.heart_liked : assets.heart}
+                alt="Likes"
+                width={20}
+                height={20}
+              />
+              <span>{likeCount}</span>
+            </div>
+
+            {/* Views */}
+            <div
+              className="flex items-center space-x-1 text-gray-700"
+              title="Views"
+            >
+              <Image src={assets.views} alt="Views" width={20} height={20} />
+              <span>{views}</span>
+            </div>
+
+            {/* PDF download */}
+            {pdfUrl && (
+              <a
+                href={getDriveDownloadLink(pdfUrl)}
+                download
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block"
+                title="Скачать книгу в PDF"
+              >
+                <Image src={assets.download} alt="Скачать PDF" width={20} />
+              </a>
+            )}
+          </div>
         </div>
       </div>
     </div>

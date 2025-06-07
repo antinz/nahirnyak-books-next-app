@@ -41,6 +41,7 @@ function BlogList() {
     "Брак и семья",
     "Для служителей",
     "Проповеди и статьи",
+    "Видео-проповеди",
   ];
 
   const sortedFilteredBlogs = useMemo(() => {
@@ -169,6 +170,8 @@ function BlogList() {
                     content={item.content}
                     category={item.category}
                     pdfUrl={item.pdfUrl}
+                    views={item.views}
+                    likes={item.likes}
                   />
                 ))}
               </div>

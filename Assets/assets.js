@@ -16,8 +16,14 @@ import home_icon from "./home_icon.png";
 import comment_icon from "./comment_icon.png";
 import edit_icon from "./edit_icon.png";
 import chapter_icon from "./chapter_icon.png";
+import heart_liked from "./heart_liked.png";
+import heart from "./heart.png";
+import views from "./view.png";
 
 export const assets = {
+  heart,
+  heart_liked,
+  views,
   profile_icon,
   logo,
   arrow,

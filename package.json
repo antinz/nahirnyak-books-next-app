@@ -17,8 +17,11 @@
     "next": "15.2.3",
     "next-cloudinary": "^6.16.0",
     "next-sitemap": "^4.2.3",
+    "parchment": "^3.0.0",
+    "quill-paste-smart": "^2.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-quill-new": "^3.4.6",
     "react-spinners": "^0.16.1",
     "react-toastify": "^11.0.5"
   },

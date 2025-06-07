@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { assets } from "/Assets/assets";
 import LoadingSpinner from "/Components/LoadingSpinner.jsx";
-import { renderContentWithInlineFootnotes } from "/utils/renderContentWithInlineFootnotes";
+import { renderContentWithInlineFootnotes } from "../../../../utils/renderContentWithInlineFootnotes.js";
 
 function ChapterPage({ params }) {
   const router = useRouter();
@@ -165,11 +165,20 @@ function ChapterPage({ params }) {
         </div>
 
         <div className="mx-4 sm:mx-6 md:mx-10 max-w-[800px] md:mx-auto mt-4 mb-10">
-          <div className="blog-content max-w-none text-justify sm:text-start">
-            {renderContentWithInlineFootnotes(
-              chapterData,
-              expandedFootnotes,
-              toggleFootnote
+          <div className="quill-content max-w-none text-justify sm:text-start">
+            {chapterData.currentChapter.isQuillFormat ? (
+              <div
+                className="quill-content"
+                dangerouslySetInnerHTML={{
+                  __html: chapterData.currentChapter.content,
+                }}
+              />
+            ) : (
+              renderContentWithInlineFootnotes(
+                chapterData,
+                expandedFootnotes,
+                toggleFootnote
+              )
             )}
           </div>
 

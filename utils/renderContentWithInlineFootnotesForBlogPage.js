@@ -7,6 +7,13 @@ export function renderContentWithInlineFootnotesForBlogPage(
   expandedFootnotes,
   toggleFootnote
 ) {
+  if (typeof data.content !== "string") {
+    console.error(
+      "Expected content to be a string, but got:",
+      typeof data.content
+    );
+    return null;
+  }
   return parse(data.content, {
     replace: (node) => {
       if (node.name === "sup" && node.children?.[0]?.data?.trim()) {

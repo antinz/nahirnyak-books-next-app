@@ -3,10 +3,18 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import dynamic from "next/dynamic";
 
+const RichTextEditor = dynamic(
+  () => import("../../../Components/AdminComponents/textEditor"),
+  {
+    ssr: false,
+  }
+);
 function EditBlogPage() {
   const [blogs, setBlogs] = useState([]);
   const [selectedBlogId, setSelectedBlogId] = useState("");
+  const [resetKey, setResetKey] = useState(0);
 
   const [title, setTitle] = useState("");
   const [subTitle, setSubTitle] = useState("");
@@ -45,6 +53,7 @@ function EditBlogPage() {
         setCurrentImage(blog.image || "");
         setCategory(blog.category || "");
         setSubTitle(blog.subTitle || "");
+        setResetKey((prev) => prev + 1);
       } catch (err) {
         console.error("Ошибка при загрузке книги", err);
         toast.error("Ошибка при загрузке книги");
@@ -145,24 +154,21 @@ function EditBlogPage() {
 
           <div className="mt-6">
             <p className="text-lg font-medium">Описание книги</p>
-            <textarea
-              type="text"
+            <RichTextEditor
+              key={`desc-${resetKey}`}
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Описание"
-              className="w-full sm:w-[1000px] mt-4 px-4 py-3 border"
-              rows={6}
+              onChange={setDescription}
+              toolbarId="toolbar-description" // optional, if your editor supports custom toolbar IDs
             />
           </div>
 
           <div className="mt-6">
             <p className="text-lg font-medium">Содержание</p>
-            <textarea
+            <RichTextEditor
+              key={`content-${resetKey}`}
               value={content}
-              onChange={(e) => setContent(e.target.value)}
-              placeholder="Содержание"
-              className="w-full sm:w-[1000px] mt-4 px-4 py-3 border"
-              rows={15}
+              onChange={setContent}
+              toolbarId="toolbar-content" // optional
             />
           </div>
           <div className="mt-6">

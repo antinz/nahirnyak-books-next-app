@@ -7,7 +7,7 @@ import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { use, useEffect, useState } from "react";
-import { renderContentWithInlineFootnotesForBlogPage } from "/utils/renderContentWithInlineFootnotesForBlogPage";
+import { renderContentWithInlineFootnotesForBlogPage } from "../../../utils/renderContentWithInlineFootnotesForBlogPage.js";
 import { toast } from "react-toastify";
 
 function Page({ params }) {
@@ -27,9 +27,16 @@ function Page({ params }) {
   const fetchBlogData = async () => {
     try {
       setLoading(true);
+      const visitorId = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("visitorId="))
+        ?.split("=")[1];
       const res = await axios.get("/api/blog", {
         params: {
           id: unwrappedParams.id,
+        },
+        headers: {
+          "x-visitor-id": visitorId,
         },
       });
       setData(res.data);
@@ -59,6 +66,13 @@ function Page({ params }) {
   useEffect(() => {
     fetchBlogData();
     fetchChapters();
+  }, []);
+
+  useEffect(() => {
+    if (!document.cookie.includes("visitorId")) {
+      const id = crypto.randomUUID();
+      document.cookie = `visitorId=${id}; path=/; max-age=31536000`;
+    }
   }, []);
 
   return loading ? (
@@ -106,15 +120,24 @@ function Page({ params }) {
             priority
           />
         </div>
-        <div
-          className="blog-description px-4 sm:px-6 md:px-8 lg:px-0"
-          dangerouslySetInnerHTML={{ __html: data.description }}
-        ></div>
-        <div className="blog-content max-w-none text-justify sm:text-start">
-          {renderContentWithInlineFootnotesForBlogPage(
-            data,
-            expandedFootnotes,
-            toggleFootnote
+        <div className="quill-description px-4 sm:px-6 md:px-8 lg:px-0">
+          <div
+            className="quill-description"
+            dangerouslySetInnerHTML={{ __html: data.description }}
+          />
+        </div>
+        <div className="quill-content max-w-none sm:text-start">
+          {data.isQuillFormat ? (
+            <div
+              className="quill-content"
+              dangerouslySetInnerHTML={{ __html: data.content }}
+            />
+          ) : (
+            renderContentWithInlineFootnotesForBlogPage(
+              data,
+              expandedFootnotes,
+              toggleFootnote
+            )
           )}
         </div>
 
