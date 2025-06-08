@@ -114,7 +114,7 @@ function Page({ params }) {
           data.category === "Видео-проповеди" ? "mt-[0px]" : "mt-[-100px]"
         }`}
       >
-        {!data.category === "Видео-проповеди" && (
+        {data.category !== "Видео-проповеди" && (
           <div className="relative">
             <Image
               src={data.image}
