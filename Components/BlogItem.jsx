@@ -19,8 +19,16 @@ function BlogItem({ title, category, image, id, pdfUrl, views, likes }) {
   }
 
   useEffect(() => {
-    const fingerprint = localStorage.getItem(`liked-${id}`);
-    if (fingerprint === "true") setLiked(true);
+    async function fetchLikeStatus() {
+      const res = await fetch(`/api/blog?id=${id}`);
+      const data = await res.json();
+      if (data && data.likedBy) {
+        const fingerprint = localStorage.getItem("userFingerprint");
+        setLiked(data.likedBy.includes(fingerprint));
+        setLikeCount(data.likes);
+      }
+    }
+    fetchLikeStatus();
   }, [id]);
 
   const handleLikeToggle = async () => {
@@ -33,7 +41,6 @@ function BlogItem({ title, category, image, id, pdfUrl, views, likes }) {
     if (data.success) {
       setLiked(!liked);
       setLikeCount(data.likes);
-      localStorage.setItem(`liked-${id}`, !liked);
     }
   };
 

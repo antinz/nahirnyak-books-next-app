@@ -38,15 +38,19 @@ export async function GET(request) {
       }
 
       // Generate a hash from IP + User-Agent (or cookie if using client fingerprinting)
-      const visitorId = request.headers.get("x-visitor-id") || "unknown";
-      const hashedId = crypto
+      const ip =
+        request.headers.get("x-forwarded-for") || request.ip || "unknown";
+      const userAgent = request.headers.get("user-agent") || "unknown";
+
+      // Create a visitor fingerprint from IP and User-Agent (or just IP if you want)
+      const visitorFingerprint = crypto
         .createHash("sha256")
-        .update(visitorId)
+        .update(`${ip}-${userAgent}`)
         .digest("hex");
 
-      if (!blog.uniqueViewers.includes(hashedId)) {
+      if (!blog.uniqueViewers.includes(visitorFingerprint)) {
         blog.views += 1;
-        blog.uniqueViewers.push(hashedId);
+        blog.uniqueViewers.push(visitorFingerprint);
         await blog.save();
       }
 
@@ -262,7 +266,7 @@ export async function PATCH(request) {
       .update(`${ip}-${userAgent}`)
       .digest("hex");
 
-    blog.likedBy = blog.likedBy || []; // Ensure it's an array
+    blog.likedBy = blog.likedBy || [];
 
     const alreadyLiked = blog.likedBy.includes(fingerprint);
 
@@ -270,7 +274,7 @@ export async function PATCH(request) {
       blog.likes += 1;
       blog.likedBy.push(fingerprint);
     } else if (action === "unlike" && alreadyLiked) {
-      blog.likes -= 1;
+      blog.likes = Math.max(0, blog.likes - 1);
       blog.likedBy = blog.likedBy.filter((id) => id !== fingerprint);
     }
 
