@@ -2,15 +2,8 @@ import { ConnectDB } from "/lib/config/db.js";
 import ChapterModel from "/lib/config/models/ChapterModel.js";
 
 const { NextResponse } = require("next/server");
-const LoadDB = async () => {
-  await ConnectDB();
-};
-
-LoadDB();
-
-// API Endpoint to get all book chapters
-// API Endpoint to get chapters
 export async function GET(request) {
+  await ConnectDB();
   try {
     const url = request.nextUrl;
     const blogId = url.searchParams.get("id");
@@ -85,6 +78,7 @@ export async function GET(request) {
 
 // API endpoint for uploading book chapters
 export async function POST(request) {
+  await ConnectDB();
   try {
     const body = await request.json();
     const { blogId, title, content, blogTitle, footnotes } = body;
@@ -119,6 +113,7 @@ export async function POST(request) {
 //API endpoint to delete blog
 
 export async function DELETE(request) {
+  await ConnectDB();
   try {
     const chapterId = request.nextUrl.searchParams.get("id");
 
@@ -149,6 +144,7 @@ export async function DELETE(request) {
 }
 
 export async function PUT(request) {
+  await ConnectDB();
   try {
     const chapterId = request.nextUrl.searchParams.get("id");
     const body = await request.json();

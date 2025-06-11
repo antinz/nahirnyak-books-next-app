@@ -61,6 +61,7 @@ td {
 	word-spacing: normal;
 	font-size: clamp(1rem, 2.5vw, 1.125rem);
 	line-height: 1.6;
+	text-indent: 2rem;
 }
 
 .quill-content b {
@@ -302,8 +303,7 @@ td {
 	font-size: clamp(1rem, 2vw, 1rem);
 }
 
-.quill-description p,
-.quill-description h3 {
+.quill-description {
 	font-style: italic;
 }
 

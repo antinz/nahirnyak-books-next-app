@@ -3,10 +3,6 @@ import BlogModel from "/lib/config/models/BlogModel.js";
 import crypto from "crypto";
 import { v2 as cloudinary } from "cloudinary";
 import { NextResponse } from "next/server";
-const LoadDB = async () => {
-  await ConnectDB();
-};
-LoadDB();
 
 // Configure Cloudinary
 cloudinary.config({
@@ -28,6 +24,7 @@ const PREUPLOADED_IMAGES = {
 
 // API Endpoint to get blogs
 export async function GET(request) {
+  await ConnectDB();
   try {
     const blogId = request.nextUrl.searchParams.get("id");
 
@@ -35,23 +32,6 @@ export async function GET(request) {
       const blog = await BlogModel.findById(blogId);
       if (!blog) {
         return NextResponse.json({ success: false, message: "Blog not found" });
-      }
-
-      // Generate a hash from IP + User-Agent (or cookie if using client fingerprinting)
-      const ip =
-        request.headers.get("x-forwarded-for") || request.ip || "unknown";
-      const userAgent = request.headers.get("user-agent") || "unknown";
-
-      // Create a visitor fingerprint from IP and User-Agent (or just IP if you want)
-      const visitorFingerprint = crypto
-        .createHash("sha256")
-        .update(`${ip}-${userAgent}`)
-        .digest("hex");
-
-      if (!blog.uniqueViewers.includes(visitorFingerprint)) {
-        blog.views += 1;
-        blog.uniqueViewers.push(visitorFingerprint);
-        await blog.save();
       }
 
       return NextResponse.json(blog);
@@ -69,6 +49,7 @@ export async function GET(request) {
 // API endpoint to upload blog
 
 export async function POST(request) {
+  await ConnectDB();
   try {
     const formData = await request.formData();
     const imageFile = formData.get("image");
@@ -146,6 +127,7 @@ export async function POST(request) {
 }
 
 export async function PUT(request) {
+  await ConnectDB();
   try {
     const blogId = request.nextUrl.searchParams.get("id");
     if (!blogId) {
@@ -239,58 +221,9 @@ export async function PUT(request) {
   }
 }
 
-export async function PATCH(request) {
-  try {
-    const blogId = request.nextUrl.searchParams.get("id");
-    const action = request.nextUrl.searchParams.get("action");
-
-    if (!blogId || !["like", "unlike"].includes(action)) {
-      return NextResponse.json(
-        { success: false, message: "Invalid request" },
-        { status: 400 }
-      );
-    }
-
-    const blog = await BlogModel.findById(blogId);
-    if (!blog) {
-      return NextResponse.json(
-        { success: false, message: "Blog not found" },
-        { status: 404 }
-      );
-    }
-
-    const ip = request.headers.get("x-forwarded-for") || "unknown";
-    const userAgent = request.headers.get("user-agent") || "unknown";
-    const fingerprint = crypto
-      .createHash("sha256")
-      .update(`${ip}-${userAgent}`)
-      .digest("hex");
-
-    blog.likedBy = blog.likedBy || [];
-
-    const alreadyLiked = blog.likedBy.includes(fingerprint);
-
-    if (action === "like" && !alreadyLiked) {
-      blog.likes += 1;
-      blog.likedBy.push(fingerprint);
-    } else if (action === "unlike" && alreadyLiked) {
-      blog.likes = Math.max(0, blog.likes - 1);
-      blog.likedBy = blog.likedBy.filter((id) => id !== fingerprint);
-    }
-
-    await blog.save();
-    return NextResponse.json({ success: true, likes: blog.likes });
-  } catch (error) {
-    console.error("Like/Unlike Error:", error);
-    return NextResponse.json(
-      { success: false, message: error.message },
-      { status: 500 }
-    );
-  }
-}
-
 // API endpoint to delete blog
 export async function DELETE(request) {
+  await ConnectDB();
   try {
     const id = request.nextUrl.searchParams.get("id");
     const blog = await BlogModel.findById(id);

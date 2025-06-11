@@ -1,53 +1,21 @@
+import axios from "axios";
 import { assets } from "/Assets/assets";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
 
-function BlogItem({ title, category, image, id, pdfUrl, views, likes }) {
-  const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(likes || 0);
+function BlogItem({ title, category, image, id, pdfUrl }) {
   function getDriveDownloadLink(shareUrl) {
     if (!shareUrl) return null;
-
     const match = shareUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-    if (match && match[1]) {
-      const fileId = match[1];
-      return `https://drive.google.com/uc?export=download&id=${fileId}`;
-    }
-
-    return shareUrl;
+    return match?.[1]
+      ? `https://drive.google.com/uc?export=download&id=${match[1]}`
+      : shareUrl;
   }
-
-  useEffect(() => {
-    async function fetchLikeStatus() {
-      const res = await fetch(`/api/blog?id=${id}`);
-      const data = await res.json();
-      if (data && data.likedBy) {
-        const fingerprint = localStorage.getItem("userFingerprint");
-        setLiked(data.likedBy.includes(fingerprint));
-        setLikeCount(data.likes);
-      }
-    }
-    fetchLikeStatus();
-  }, [id]);
-
-  const handleLikeToggle = async () => {
-    const action = liked ? "unlike" : "like";
-    const res = await fetch(`/api/blog?id=${id}&action=${action}`, {
-      method: "PATCH",
-    });
-    const data = await res.json();
-
-    if (data.success) {
-      setLiked(!liked);
-      setLikeCount(data.likes);
-    }
-  };
 
   return (
     <div className="max-w-[330px] sm:max-w-[300px] w-full bg-white border border-black hover:shadow-[_7px_7px_0px_#000000] flex flex-col h-[430px]">
       <div className="relative w-full h-[230px]">
-        {image ? (
+        {image && (
           <Image
             src={image}
             alt=""
@@ -55,7 +23,7 @@ function BlogItem({ title, category, image, id, pdfUrl, views, likes }) {
             className="object-cover w-full h-full border-black border-b"
             priority
           />
-        ) : null}
+        )}
 
         {category === "Беседы о воле Божией" && (
           <span className="absolute top-5 left-0 bg-opacity-60 text-white font-extrabold text-3xl md:text-3xl p-2 w-full text-center uppercase">
@@ -99,30 +67,6 @@ function BlogItem({ title, category, image, id, pdfUrl, views, likes }) {
           </Link>
 
           <div className="flex items-center space-x-4">
-            {/* Likes */}
-            <div
-              className="flex items-center space-x-1 text-gray-700 cursor-pointer"
-              title="Likes"
-              onClick={handleLikeToggle}
-            >
-              <Image
-                src={liked ? assets.heart_liked : assets.heart}
-                alt="Likes"
-                width={20}
-                height={20}
-              />
-              <span>{likeCount}</span>
-            </div>
-
-            {/* Views */}
-            <div
-              className="flex items-center space-x-1 text-gray-700"
-              title="Views"
-            >
-              <Image src={assets.views} alt="Views" width={20} height={20} />
-              <span>{views}</span>
-            </div>
-
             {/* PDF download */}
             {pdfUrl && (
               <a
