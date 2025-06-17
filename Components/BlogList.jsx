@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
-import BlogItem from "./BlogItem.jsx";
+import LazyBlogItemWrapper from "./LazyBlogItemWrapper";
 import axios from "axios";
 import LoadingSpinner from "./LoadingSpinner.jsx";
 import { assets } from "/Assets/assets.js";
@@ -160,17 +160,19 @@ function BlogList() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-6 gap-x-20">
               {sortedFilteredBlogs.map((item) => (
-                <BlogItem
+                <LazyBlogItemWrapper
                   key={item._id}
-                  id={item._id}
-                  image={item.image}
-                  title={item.title}
-                  description={item.description}
-                  content={item.content}
-                  category={item.category}
-                  pdfUrl={item.pdfUrl}
-                  views={item.views}
-                  likes={item.likes}
+                  item={{
+                    id: item._id,
+                    image: item.image,
+                    title: item.title,
+                    description: item.description,
+                    content: item.content,
+                    category: item.category,
+                    pdfUrl: item.pdfUrl,
+                    views: item.views,
+                    likes: item.likes,
+                  }}
                 />
               ))}
             </div>
