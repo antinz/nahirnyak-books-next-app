@@ -1,4 +1,3 @@
-import axios from "axios";
 import { assets } from "/Assets/assets";
 import Image from "next/image";
 import Link from "next/link";

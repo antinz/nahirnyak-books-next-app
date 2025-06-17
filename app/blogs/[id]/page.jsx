@@ -122,7 +122,6 @@ function Page({ params }) {
               height={720}
               alt=""
               className="border-4 border-white w-full h-auto sm:h-[550px] object-cover"
-              priority
             />
           </div>
         )}

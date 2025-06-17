@@ -242,3 +242,37 @@ export async function DELETE(request) {
     return NextResponse.json({ success: false, message: error.message });
   }
 }
+
+// /app/api/blog/views/route.js
+// PATCH /api/blogs/views?id=<blogId>
+export async function PATCH(request) {
+  await ConnectDB();
+
+  const blogId = request.nextUrl.searchParams.get("id");
+  const { fingerprint } = await request.json();
+
+  if (!blogId || !fingerprint) {
+    return NextResponse.json(
+      { success: false, message: "Missing data" },
+      { status: 400 }
+    );
+  }
+
+  const blog = await BlogModel.findById(blogId);
+  if (!blog) {
+    return NextResponse.json(
+      { success: false, message: "Blog not found" },
+      { status: 404 }
+    );
+  }
+
+  if (!blog.uniqueViewers.includes(fingerprint)) {
+    blog.uniqueViewers.push(fingerprint);
+    await blog.save();
+  }
+
+  return NextResponse.json({
+    success: true,
+    uniqueViews: blog.uniqueViewers.length,
+  });
+}
