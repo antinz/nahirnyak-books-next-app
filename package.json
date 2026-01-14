@@ -15,7 +15,7 @@
     "cloudinary": "^2.6.0",
     "html-react-parser": "^5.2.3",
     "mongoose": "^8.13.0",
-    "next": "15.2.3",
+    "next": "15.2.8",
     "next-cloudinary": "^6.16.0",
     "next-sitemap": "^4.2.3",
     "parchment": "^3.0.0",
