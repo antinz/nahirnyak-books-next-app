@@ -43,6 +43,7 @@ function BlogList() {
     "Для служителей",
     "Проповеди и статьи",
     "Видео-проповеди",
+    "Христианская публицистика",
   ];
 
   const sortedFilteredBlogs = useMemo(() => {
