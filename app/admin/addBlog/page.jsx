@@ -121,6 +121,9 @@ function Page() {
           <option value="Для служителей">Для служителей</option>
           <option value="Проповеди и статьи">Проповеди и статьи</option>
           <option value="Видео-проповеди">Видео-проповеди</option>
+          <option value="Христианская публицистика">
+            Христианская публицистика
+          </option>
         </select>
 
         {/* Common: Image Upload */}
