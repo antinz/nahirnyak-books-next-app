@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import Sidebar from "/Components/AdminComponents/Sidebar.jsx";
+import Sidebar from "../../Components/AdminComponents/Sidebar";
 import { ToastContainer } from "react-toastify";
 import { useEffect } from "react";
 

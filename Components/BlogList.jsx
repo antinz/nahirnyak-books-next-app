@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useMemo } from "react";
-import BlogItem from "./BlogItem.jsx";
 import axios from "axios";
-import LoadingSpinner from "./LoadingSpinner.jsx";
-import { assets } from "/Assets/assets.js";
+import LoadingSpinner from "../Components/LoadingSpinner";
+import { assets } from "../Assets/assets.js";
 import Image from "next/image.js";
 import { toast } from "react-toastify";
-import LazyBlogItemWrapper from "./LazyBlogItemWrapper.jsx";
+import LazyBlogItemWrapper from "../Components/LazyBlogItemWrapper";
 
 function BlogList() {
   const [menu, setMenu] = useState("Все");
@@ -48,7 +47,7 @@ function BlogList() {
 
   const sortedFilteredBlogs = useMemo(() => {
     const filtered = blogs.filter(
-      (item) => menu === "Все" || item.category === menu
+      (item) => menu === "Все" || item.category === menu,
     );
 
     if (menu === "Беседы о воле Божией") {
@@ -84,7 +83,7 @@ function BlogList() {
       ];
 
       return filtered.sort(
-        (a, b) => desiredOrder.indexOf(a.title) - desiredOrder.indexOf(b.title)
+        (a, b) => desiredOrder.indexOf(a.title) - desiredOrder.indexOf(b.title),
       );
     }
 

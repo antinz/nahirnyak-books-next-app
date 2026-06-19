@@ -1,5 +1,5 @@
 "use client";
-import ChapterTableItem from "/Components/AdminComponents/ChapterTableItem.jsx";
+import ChapterTableItem from "../../../Components/AdminComponents/ChapterTableItem";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -28,7 +28,7 @@ function Page() {
 
   const deleteChapter = async (mongoId, title) => {
     const confirmDelete = window.confirm(
-      `ВЫ ТОЧНО УВЕРЕНЫ, ЧТО ХОТИТЕ УДАЛИТЬ ГЛАВУ "${title.toUpperCase()}"? ЭТО НАВСЕГДА УДАЛИТ ГЛАВУ ИЗ БАЗЫ ДАННЫХ!!!`
+      `ВЫ ТОЧНО УВЕРЕНЫ, ЧТО ХОТИТЕ УДАЛИТЬ ГЛАВУ "${title.toUpperCase()}"? ЭТО НАВСЕГДА УДАЛИТ ГЛАВУ ИЗ БАЗЫ ДАННЫХ!!!`,
     );
     if (!confirmDelete) return;
 
@@ -56,7 +56,7 @@ function Page() {
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const paginatedChapters = chapters.slice(
     startIndex,
-    startIndex + ITEMS_PER_PAGE
+    startIndex + ITEMS_PER_PAGE,
   );
 
   return (

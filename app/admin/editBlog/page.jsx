@@ -9,7 +9,7 @@ const RichTextEditor = dynamic(
   () => import("../../../Components/AdminComponents/textEditor"),
   {
     ssr: false,
-  }
+  },
 );
 function EditBlogPage() {
   const [blogs, setBlogs] = useState([]);

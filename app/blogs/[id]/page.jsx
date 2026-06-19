@@ -1,8 +1,8 @@
 "use client";
 
-import { assets } from "/Assets/assets";
-import Footer from "/Components/Footer.jsx";
-import LoadingSpinner from "/Components/LoadingSpinner.jsx";
+import { assets } from "../../../Assets/assets";
+import Footer from "../../../Components/Footer";
+import LoadingSpinner from "../../../Components/LoadingSpinner";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
@@ -142,7 +142,7 @@ function Page({ params }) {
             renderContentWithInlineFootnotesForBlogPage(
               data,
               expandedFootnotes,
-              toggleFootnote
+              toggleFootnote,
             )
           )}
         </div>

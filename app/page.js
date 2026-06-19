@@ -1,9 +1,9 @@
 "use client";
-import Footer from "/Components/Footer.jsx";
-import Header from "/Components/Header.jsx";
+import Footer from "../Components/Footer";
+import Header from "../Components/Header";
 import { ToastContainer } from "react-toastify";
-import BlogList from "/Components/BlogList.jsx";
-import LoadingSpinner from "/Components/LoadingSpinner.jsx";
+import BlogList from "../Components/BlogList";
+import LoadingSpinner from "../Components/LoadingSpinner";
 import { useEffect, useState } from "react";
 import axios from "axios";
 

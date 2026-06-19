@@ -1,6 +1,6 @@
 "use client";
 
-import BlogTableItem from "/Components/AdminComponents/BlogTableItem.jsx";
+import BlogTableItem from "../../../Components/AdminComponents/BlogTableItem";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -27,7 +27,7 @@ function Page() {
 
   const deleteBlog = async (mongoId, title) => {
     const confirmDelete = window.confirm(
-      `ВЫ ТОЧНО УВЕРЕНЫ, ЧТО ХОТИТЕ УДАЛИТЬ КНИГУ "${title.toUpperCase()}"? ЭТО НАВСЕГДА УДАЛИТ КНИГУ ИЗ БАЗЫ ДАННЫХ!!!`
+      `ВЫ ТОЧНО УВЕРЕНЫ, ЧТО ХОТИТЕ УДАЛИТЬ КНИГУ "${title.toUpperCase()}"? ЭТО НАВСЕГДА УДАЛИТ КНИГУ ИЗ БАЗЫ ДАННЫХ!!!`,
     );
     if (!confirmDelete) return;
     try {

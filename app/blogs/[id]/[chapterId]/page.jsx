@@ -4,8 +4,8 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
-import { assets } from "/Assets/assets";
-import LoadingSpinner from "/Components/LoadingSpinner.jsx";
+import { assets } from "../../../../Assets/assets";
+import LoadingSpinner from "../../../../Components/LoadingSpinner";
 import { renderContentWithInlineFootnotes } from "../../../../utils/renderContentWithInlineFootnotes.js";
 
 function ChapterPage({ params }) {
@@ -177,7 +177,7 @@ function ChapterPage({ params }) {
               renderContentWithInlineFootnotes(
                 chapterData,
                 expandedFootnotes,
-                toggleFootnote
+                toggleFootnote,
               )
             )}
           </div>

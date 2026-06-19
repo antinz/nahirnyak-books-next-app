@@ -15,6 +15,8 @@ const nextConfig = {
       },
     ],
   },
+
+  allowedDevOrigins: ["10.63.200.250"],
 };
 
 export default bundleAnalyzer(nextConfig);

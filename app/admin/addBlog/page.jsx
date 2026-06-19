@@ -1,6 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
-import { assets } from "/Assets/assets";
+import { assets } from "../../../Assets/assets";
 import axios from "axios";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -11,7 +11,7 @@ const RichTextEditor = dynamic(
   () => import("../../../Components/AdminComponents/textEditor"),
   {
     ssr: false,
-  }
+  },
 );
 
 function Page() {
@@ -134,10 +134,10 @@ function Page() {
               data.category === "Проповеди и статьи"
                 ? articleImage
                 : data.category === "Видео-проповеди"
-                ? videoPreachImage
-                : !image
-                ? assets.upload_area
-                : URL.createObjectURL(image)
+                  ? videoPreachImage
+                  : !image
+                    ? assets.upload_area
+                    : URL.createObjectURL(image)
             }
             width={140}
             height={70}

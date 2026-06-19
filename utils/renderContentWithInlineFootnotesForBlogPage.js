@@ -1,16 +1,16 @@
-import { assets } from "/Assets/assets";
+import { assets } from "../Assets/assets";
 import parse from "html-react-parser";
 import Image from "next/image";
 
 export function renderContentWithInlineFootnotesForBlogPage(
   data,
   expandedFootnotes,
-  toggleFootnote
+  toggleFootnote,
 ) {
   if (typeof data.content !== "string") {
     console.error(
       "Expected content to be a string, but got:",
-      typeof data.content
+      typeof data.content,
     );
     return null;
   }
@@ -19,10 +19,10 @@ export function renderContentWithInlineFootnotesForBlogPage(
       if (node.name === "sup" && node.children?.[0]?.data?.trim()) {
         const key = node.children[0].data.trim();
         const footnoteObj = data.footnotes?.find(
-          (obj) => Object.keys(obj)[0] === key
+          (obj) => Object.keys(obj)[0] === key,
         );
         const footnoteIndex = data.footnotes?.findIndex(
-          (obj) => Object.keys(obj)[0] === key
+          (obj) => Object.keys(obj)[0] === key,
         );
         if (!footnoteObj || footnoteIndex === -1) return;
         if (expandedFootnotes[footnoteIndex]) {

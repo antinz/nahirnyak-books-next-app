@@ -1,5 +1,5 @@
-import { ConnectDB } from "/lib/config/db.js";
-import ChapterModel from "/lib/config/models/ChapterModel.js";
+import { ConnectDB } from "../../../../lib/config/db.js";
+import ChapterModel from "../../../../lib/config/models/ChapterModel.js";
 
 const { NextResponse } = require("next/server");
 export async function GET(request) {
@@ -28,7 +28,7 @@ export async function GET(request) {
     // ✅ Return only all chapters for a blog (used for sidebar)
     if (all === "true" && blogId) {
       const chapters = await ChapterModel.find({ blogId }).sort(
-        "chapterNumber"
+        "chapterNumber",
       );
       return NextResponse.json(chapters);
     }
@@ -105,7 +105,7 @@ export async function POST(request) {
     console.error("POST Chapter Error:", error);
     return NextResponse.json(
       { error: "Ошибка при добавлении главы" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -120,7 +120,7 @@ export async function DELETE(request) {
     if (!chapterId) {
       return NextResponse.json(
         { success: false, message: "ID главы не предоставлен" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -128,7 +128,7 @@ export async function DELETE(request) {
     if (!chapter) {
       return NextResponse.json(
         { success: false, message: "Глава не найдена" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -138,7 +138,7 @@ export async function DELETE(request) {
     console.error("Ошибка при удалении главы:", error);
     return NextResponse.json(
       { success: false, message: "Ошибка сервера при удалении главы" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -159,13 +159,13 @@ export async function PUT(request) {
         chapterNumber: body.chapterNumber,
         footnotes: body.footnotes,
       },
-      { new: true }
+      { new: true },
     );
 
     if (!updatedChapter) {
       return NextResponse.json(
         { success: false, message: "Глава не найдена" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -174,7 +174,7 @@ export async function PUT(request) {
     console.error("PUT Chapter Error:", error);
     return NextResponse.json(
       { success: false, message: "Ошибка при обновлении главы" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

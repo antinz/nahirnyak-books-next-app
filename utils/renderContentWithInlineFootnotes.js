@@ -1,21 +1,21 @@
-import { assets } from "/Assets/assets";
+import { assets } from "../Assets/assets";
 import parse from "html-react-parser";
 import Image from "next/image";
 
 export function renderContentWithInlineFootnotes(
   chapterData,
   expandedFootnotes,
-  toggleFootnote
+  toggleFootnote,
 ) {
   return parse(chapterData.currentChapter.content, {
     replace: (node) => {
       if (node.name === "sup" && node.children?.[0]?.data?.trim()) {
         const key = node.children[0].data.trim();
         const footnoteObj = chapterData.currentChapter.footnotes?.find(
-          (obj) => Object.keys(obj)[0] === key
+          (obj) => Object.keys(obj)[0] === key,
         );
         const footnoteIndex = chapterData.currentChapter.footnotes?.findIndex(
-          (obj) => Object.keys(obj)[0] === key
+          (obj) => Object.keys(obj)[0] === key,
         );
         if (!footnoteObj || footnoteIndex === -1) return;
         if (expandedFootnotes[footnoteIndex]) {

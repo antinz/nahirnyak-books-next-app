@@ -1,5 +1,5 @@
-import { ConnectDB } from "/lib/config/db.js";
-import BlogModel from "/lib/config/models/BlogModel.js";
+import { ConnectDB } from "../../../lib/config/db.js";
+import BlogModel from "../../../lib/config/models/BlogModel.js";
 import { v2 as cloudinary } from "cloudinary";
 import { NextResponse } from "next/server";
 
@@ -86,7 +86,7 @@ export async function POST(request) {
           (error, result) => {
             if (error) reject(error);
             else resolve(result);
-          }
+          },
         );
         uploadStream.end(buffer);
       });
@@ -132,7 +132,7 @@ export async function PUT(request) {
     if (!blogId) {
       return NextResponse.json(
         { success: false, message: "ID блога не предоставлен" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -150,13 +150,13 @@ export async function PUT(request) {
       const updatedBlog = await BlogModel.findByIdAndUpdate(
         blogId,
         updateFields,
-        { new: true }
+        { new: true },
       );
       return updatedBlog
         ? NextResponse.json({ success: true, updatedBlog })
         : NextResponse.json(
             { success: false, message: "Блог не найден" },
-            { status: 404 }
+            { status: 404 },
           );
     }
 
@@ -173,7 +173,7 @@ export async function PUT(request) {
     if (!blog) {
       return NextResponse.json(
         { success: false, message: "Блог не найден" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -195,7 +195,7 @@ export async function PUT(request) {
           (error, result) => {
             if (error) reject(error);
             else resolve(result);
-          }
+          },
         );
         uploadStream.end(buffer);
       });
@@ -207,7 +207,7 @@ export async function PUT(request) {
     const updatedBlog = await BlogModel.findByIdAndUpdate(
       blogId,
       updateFields,
-      { new: true }
+      { new: true },
     );
 
     return NextResponse.json({ success: true, updatedBlog });
@@ -215,7 +215,7 @@ export async function PUT(request) {
     console.error("PUT Blog Error:", error);
     return NextResponse.json(
       { success: false, message: "Ошибка при обновлении блога" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -254,7 +254,7 @@ export async function PATCH(request) {
   if (!blogId || !fingerprint) {
     return NextResponse.json(
       { success: false, message: "Missing data" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -262,7 +262,7 @@ export async function PATCH(request) {
   if (!blog) {
     return NextResponse.json(
       { success: false, message: "Blog not found" },
-      { status: 404 }
+      { status: 404 },
     );
   }
 

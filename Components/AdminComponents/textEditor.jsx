@@ -47,7 +47,7 @@ export default function RichTextEditor({ value, onChange }) {
   useEffect(() => {
     const setPickerLabels = () => {
       const pickerItems = document.querySelectorAll(
-        ".ql-picker.ql-line-height .ql-picker-item"
+        ".ql-picker.ql-line-height .ql-picker-item",
       );
 
       if (!pickerItems.length) return;

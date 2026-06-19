@@ -1,6 +1,6 @@
 "use client";
 
-import SubsTableItem from "/Components/AdminComponents/SubsTableItem.jsx";
+import SubsTableItem from "../../../Components/AdminComponents/SubsTableItem";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";

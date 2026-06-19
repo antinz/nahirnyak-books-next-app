@@ -1,5 +1,4 @@
-import { ConnectDB } from "/lib/config/db.js";
-import EmailModel from "/lib/config/models/EmailModel.js";
+import EmailModel from "../../../lib/config/models/EmailModel.js";
 import { NextResponse } from "next/server";
 
 export async function POST(request) {
@@ -33,7 +32,7 @@ export async function GET(request) {
     console.error("Ошибка при получении email-адресов:", error);
     return NextResponse.json(
       { success: false, message: "Ошибка сервера при получении email-адресов" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -45,7 +44,7 @@ export async function DELETE(request) {
     if (!id) {
       return NextResponse.json(
         { success: false, message: "ID не предоставлен" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -58,7 +57,7 @@ export async function DELETE(request) {
     console.error("Ошибка при удалении email:", error);
     return NextResponse.json(
       { success: false, message: "Ошибка сервера при удалении email" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
