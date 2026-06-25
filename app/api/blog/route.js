@@ -36,8 +36,9 @@ export async function GET(request) {
 
       return NextResponse.json(blog);
     } else {
-      const blogs = await BlogModel.find({});
-      blogs.reverse();
+      const blogs = await BlogModel.find({})
+        .select("title category image description pdfUrl date")
+        .sort({ date: -1 });
       return NextResponse.json({ success: true, blogs });
     }
   } catch (error) {
@@ -142,7 +143,9 @@ export async function PUT(request) {
       const body = await request.json();
       const updateFields = {
         ...(body.title && { title: body.title }),
-        ...(body.description && { description: normalizeHtml(body.description) }),
+        ...(body.description && {
+          description: normalizeHtml(body.description),
+        }),
         ...(body.content && { content: normalizeHtml(body.content) }),
         ...(body.category && { category: body.category }),
         ...(body.subTitle && { subTitle: body.subTitle }),

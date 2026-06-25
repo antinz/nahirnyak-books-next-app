@@ -6,7 +6,8 @@ const LazyBlogItem = lazy(() => import("./BlogItem"));
 const LazyBlogItemWrapper = ({ item }) => {
   const { ref, inView } = useInView({
     triggerOnce: true,
-    threshold: 0.2,
+    rootMargin: "200px 0px",
+    threshold: 0,
   });
 
   return (

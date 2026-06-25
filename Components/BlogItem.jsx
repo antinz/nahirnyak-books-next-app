@@ -2,7 +2,7 @@ import { assets } from "../Assets/assets";
 import Image from "next/image";
 import Link from "next/link";
 
-function BlogItem({ title, category, image, id, pdfUrl }) {
+function BlogItem({ title, category, image, id, pdfUrl, index }) {
   function getDriveDownloadLink(shareUrl) {
     if (!shareUrl) return null;
     const match = shareUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
@@ -19,8 +19,9 @@ function BlogItem({ title, category, image, id, pdfUrl }) {
             src={image}
             alt=""
             fill
-            className="object-cover w-full h-full border-black border-b"
-            priority
+            className="object-cover..."
+            priority={index < 6}
+            loading={index < 6 ? "eager" : "lazy"}
           />
         )}
 

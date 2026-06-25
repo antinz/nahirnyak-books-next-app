@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import LoadingSpinner from "../Components/LoadingSpinner";
