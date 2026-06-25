@@ -4,6 +4,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import dynamic from "next/dynamic";
+import { normalizeHtml } from "../../../utils/normalizeHtml";
 
 const RichTextEditor = dynamic(
   () => import("../../../Components/AdminComponents/textEditor"),
@@ -79,7 +80,7 @@ function EditChapterForm() {
       const selectedBlog = blogs.find((b) => b._id === selectedBlogId);
       const res = await axios.put(`/api/blog/chapter?id=${selectedChapterId}`, {
         title: chapterTitle,
-        content: chapterContent,
+        content: normalizeHtml(chapterContent),
         blogId: selectedBlogId,
         blogTitle: selectedBlog?.title || "",
       });

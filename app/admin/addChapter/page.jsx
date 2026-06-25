@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { extractFootnotesFromHtml } from "../../../utils/extractFootnotes.js";
+import { normalizeHtml } from "../../../utils/normalizeHtml.js";
 
 const RichTextEditor = dynamic(
   () => import("../../../Components/AdminComponents/textEditor"),
@@ -77,7 +78,7 @@ function page() {
         blogId: data.blogId,
         blogTitle: selectedBlog?.title || "",
         title: data.title,
-        content: data.content,
+        content: normalizeHtml(data.content),
         chapterNumber: Number(data.chapterNumber),
         footnotes: footnotes,
       });

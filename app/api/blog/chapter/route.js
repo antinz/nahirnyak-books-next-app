@@ -1,5 +1,6 @@
 import { ConnectDB } from "../../../../lib/config/db.js";
 import ChapterModel from "../../../../lib/config/models/ChapterModel.js";
+import { normalizeHtml } from "../../../../utils/normalizeHtml.js";
 
 const { NextResponse } = require("next/server");
 export async function GET(request) {
@@ -92,7 +93,7 @@ export async function POST(request) {
       blogId,
       blogTitle,
       title,
-      content,
+      content: normalizeHtml(content),
       chapterNumber,
       footnotes,
     });
@@ -153,7 +154,7 @@ export async function PUT(request) {
       chapterId,
       {
         title: body.title,
-        content: body.content,
+        content: normalizeHtml(body.content),
         blogId: body.blogId,
         blogTitle: body.blogTitle,
         chapterNumber: body.chapterNumber,

@@ -2,6 +2,7 @@ import { ConnectDB } from "../../../lib/config/db.js";
 import BlogModel from "../../../lib/config/models/BlogModel.js";
 import { v2 as cloudinary } from "cloudinary";
 import { NextResponse } from "next/server";
+import { normalizeHtml } from "../../../utils/normalizeHtml.js";
 
 // Configure Cloudinary
 cloudinary.config({
@@ -98,8 +99,8 @@ export async function POST(request) {
     const blogData = {
       title: formData.get("title"),
       subTitle: formData.get("subTitle"),
-      description: formData.get("description"),
-      content: formData.get("content"),
+      description: normalizeHtml(formData.get("description")),
+      content: normalizeHtml(formData.get("content")),
       category,
       pdfUrl: formData.get("pdfUrl"),
       author: formData.get("author"),
@@ -141,8 +142,8 @@ export async function PUT(request) {
       const body = await request.json();
       const updateFields = {
         ...(body.title && { title: body.title }),
-        ...(body.description && { description: body.description }),
-        ...(body.content && { content: body.content }),
+        ...(body.description && { description: normalizeHtml(body.description) }),
+        ...(body.content && { content: normalizeHtml(body.content) }),
         ...(body.category && { category: body.category }),
         ...(body.subTitle && { subTitle: body.subTitle }),
       };
@@ -177,7 +178,13 @@ export async function PUT(request) {
       );
     }
 
-    const updateFields = { title, description, content, category, subTitle };
+    const updateFields = {
+      title,
+      description: normalizeHtml(description),
+      content: normalizeHtml(content),
+      category,
+      subTitle,
+    };
 
     // If new image provided
     if (image && typeof image === "object") {

@@ -55,9 +55,11 @@ td {
 }
 
 .quill-content p {
-	/* text-indent: 2em; */
+	text-indent: 2em;
 	margin-bottom: 1rem;
-	word-wrap: break-word;
+	overflow-wrap: break-word;
+	word-break: normal;
+	hyphens: none;
 	word-spacing: normal;
 	font-size: clamp(1rem, 2.5vw, 1.125rem);
 	line-height: 1.6;
@@ -160,8 +162,9 @@ td {
 	tab-size: 4;
 	-moz-tab-size: 4;
 	text-align: left;
-	white-space: pre-wrap;
-	word-wrap: break-word;
+	white-space: normal;
+	overflow-wrap: break-word;
+	word-break: normal;
 }
 
 /* Alignment */
@@ -173,6 +176,10 @@ td {
 }
 .ql-align-justify {
 	text-align: justify;
+	text-align: justify;
+	word-spacing: normal;
+	-webkit-hyphens: auto;
+	hyphens: auto;
 }
 
 /* Font sizes */

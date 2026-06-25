@@ -9,6 +9,12 @@ import Link from "next/link";
 import { use, useEffect, useState } from "react";
 import { renderContentWithInlineFootnotesForBlogPage } from "../../../utils/renderContentWithInlineFootnotesForBlogPage.js";
 import { toast } from "react-toastify";
+import { v4 as uuidv4 } from "uuid";
+
+const processContent = (html) => {
+  if (!html) return html;
+  return html.replace(/\u00A0/g, " ").replace(/&nbsp;/gi, " ");
+};
 
 function Page({ params }) {
   const unwrappedParams = use(params);
@@ -70,7 +76,7 @@ function Page({ params }) {
 
   useEffect(() => {
     if (!document.cookie.includes("visitorId")) {
-      const id = crypto.randomUUID();
+      const id = uuidv4();
       document.cookie = `visitorId=${id}; path=/; max-age=31536000`;
     }
   }, []);
@@ -129,14 +135,16 @@ function Page({ params }) {
         <div className="quill-description px-4 sm:px-6 md:px-8 lg:px-0">
           <div
             className="quill-description"
-            dangerouslySetInnerHTML={{ __html: data.description }}
+            dangerouslySetInnerHTML={{
+              __html: processContent(data.description),
+            }}
           />
         </div>
         <div className="quill-content max-w-none sm:text-start">
           {data.isQuillFormat ? (
             <div
               className="quill-content"
-              dangerouslySetInnerHTML={{ __html: data.content }}
+              dangerouslySetInnerHTML={{ __html: processContent(data.content) }}
             />
           ) : (
             renderContentWithInlineFootnotesForBlogPage(

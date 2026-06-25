@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { extractFootnotesFromHtml } from "../../../utils/extractFootnotes";
+import { normalizeHtml } from "../../../utils/normalizeHtml";
 
 const RichTextEditor = dynamic(
   () => import("../../../Components/AdminComponents/textEditor"),
@@ -54,8 +55,8 @@ function Page() {
     formData.append("pdfUrl", data.pdfUrl);
     formData.append("title", data.title);
     formData.append("subTitle", data.subTitle);
-    formData.append("description", data.description);
-    formData.append("content", data.content);
+    formData.append("description", normalizeHtml(data.description));
+    formData.append("content", normalizeHtml(data.content));
     formData.append("category", data.category);
     formData.append("author", data.author);
     formData.append("authorImg", data.authorImg);

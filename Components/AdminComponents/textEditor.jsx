@@ -3,13 +3,11 @@
 import "react-quill-new/dist/quill.snow.css";
 import ReactQuill, { Quill } from "react-quill-new";
 import { useEffect } from "react";
-import { StyleAttributor } from "parchment";
-
-// Register custom style for line-height
-const LineHeightStyle = new StyleAttributor("line-height", "line-height", {
-  scope: Quill.import("parchment").Scope.BLOCK,
+import { ClassAttributor, Scope } from "parchment";
+const LineHeightClass = new ClassAttributor("line-height", "ql-line-height", {
+  scope: Scope.BLOCK,
 });
-Quill.register(LineHeightStyle, true);
+Quill.register(LineHeightClass, true);
 
 // Line height values and their user-friendly labels
 const lineHeights = ["0.5", "0.7", "0.8", "0.9", "1", "1.5", "2", "2.5", "3"];
