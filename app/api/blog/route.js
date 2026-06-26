@@ -37,9 +37,18 @@ export async function GET(request) {
       return NextResponse.json(blog);
     } else {
       const blogs = await BlogModel.find({})
-        .select("title category image description pdfUrl date")
+        .select(
+          "title category image description pdfUrl date uniqueViewers likedBy",
+        )
         .sort({ date: -1 });
-      return NextResponse.json({ success: true, blogs });
+      return NextResponse.json({
+        success: true,
+        blogs: blogs.map((b) => ({
+          ...b.toObject(),
+          views: b.uniqueViewers.length,
+          likes: b.likedBy.length,
+        })),
+      });
     }
   } catch (error) {
     console.error(error);

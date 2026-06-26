@@ -10,6 +10,7 @@ import { use, useEffect, useState } from "react";
 import { renderContentWithInlineFootnotesForBlogPage } from "../../../utils/renderContentWithInlineFootnotesForBlogPage.js";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
+import { useTrackView } from "../../../hooks/useTrackView";
 
 const processContent = (html) => {
   if (!html) return html;
@@ -22,6 +23,7 @@ function Page({ params }) {
   const [loading, setLoading] = useState(true);
   const [chapterData, setChapterData] = useState(null);
   const [expandedFootnotes, setExpandedFootnotes] = useState({});
+  useTrackView(unwrappedParams.id);
 
   const toggleFootnote = (index) => {
     setExpandedFootnotes((prev) => ({
