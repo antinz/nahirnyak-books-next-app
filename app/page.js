@@ -4,7 +4,7 @@ import BlogList from "../Components/BlogList";
 
 async function getBlogs() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/blog`, {
-    next: { revalidate: 60 }, // ISR: обновляет каждые 60 сек
+    next: { revalidate: 120 }, // ISR: обновляет каждые 60 сек
   });
   const data = await res.json();
   return data.blogs || [];

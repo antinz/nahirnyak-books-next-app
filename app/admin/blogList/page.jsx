@@ -7,9 +7,26 @@ import { toast } from "react-toastify";
 
 const ITEMS_PER_PAGE = 6;
 
+function formatDate(dateStr) {
+  const d = new Date(dateStr);
+  return d.toLocaleDateString("ru-RU", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
 function Page() {
   const [blogs, setBlogs] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+
+  // Управление комментариями
+  const [showComments, setShowComments] = useState(false);
+  const [selectedBlog, setSelectedBlog] = useState(null);
+  const [comments, setComments] = useState([]);
+  const [commentsLoading, setCommentsLoading] = useState(false);
 
   const fetchBlogs = async () => {
     try {
@@ -46,6 +63,37 @@ function Page() {
     }
   };
 
+  const openComments = async (blog) => {
+    setSelectedBlog(blog);
+    setShowComments(true);
+    setCommentsLoading(true);
+    try {
+      const res = await axios.get(`/api/blog/comments?blogId=${blog._id}`);
+      if (res.data.success) {
+        setComments(res.data.comments);
+      }
+    } catch {
+      toast.error("Не удалось загрузить комментарии");
+    } finally {
+      setCommentsLoading(false);
+    }
+  };
+
+  const deleteComment = async (commentId) => {
+    if (!window.confirm("Удалить этот комментарий?")) return;
+    try {
+      const res = await axios.delete(
+        `/api/blog/comments?commentId=${commentId}`,
+      );
+      if (res.data.success) {
+        toast.success("Комментарий удалён");
+        setComments((prev) => prev.filter((c) => c._id !== commentId));
+      }
+    } catch {
+      toast.error("Не удалось удалить комментарий");
+    }
+  };
+
   useEffect(() => {
     fetchBlogs();
   }, []);
@@ -76,7 +124,7 @@ function Page() {
             </tr>
           </thead>
           <tbody>
-            {paginatedBlogs.map((item, i) => (
+            {paginatedBlogs.map((item) => (
               <BlogTableItem
                 key={item._id}
                 mongoId={item._id}
@@ -85,6 +133,7 @@ function Page() {
                 authorImg={item.authorImg}
                 date={item.date}
                 deleteBlog={() => deleteBlog(item._id, item.title)}
+                onViewComments={() => openComments(item)}
               />
             ))}
           </tbody>
@@ -106,6 +155,81 @@ function Page() {
           </button>
         ))}
       </div>
+
+      {/* Модальное окно комментариев (админка) */}
+      {showComments && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
+          onClick={(e) =>
+            e.target === e.currentTarget && setShowComments(false)
+          }
+        >
+          <div className="bg-white w-full max-w-lg max-h-[90vh] flex flex-col shadow-2xl border border-black">
+            {/* Header */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-black">
+              <div>
+                <h2 className="text-base font-semibold uppercase tracking-wide">
+                  Комментарии
+                </h2>
+                <p className="text-xs text-gray-500 mt-0.5 line-clamp-1">
+                  {selectedBlog?.title}
+                </p>
+              </div>
+              <button
+                onClick={() => setShowComments(false)}
+                className="text-gray-500 hover:text-black text-2xl leading-none cursor-pointer"
+              >
+                ×
+              </button>
+            </div>
+
+            {/* List */}
+            <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
+              {commentsLoading ? (
+                <p className="text-center text-gray-400 py-8">Загрузка...</p>
+              ) : comments.length === 0 ? (
+                <p className="text-center text-gray-400 py-8">
+                  Комментариев пока нет
+                </p>
+              ) : (
+                comments.map((c) => (
+                  <div
+                    key={c._id}
+                    className="border-b border-gray-100 pb-4 last:border-0"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex-1">
+                        <div className="flex items-baseline gap-3 mb-1">
+                          <span className="font-semibold text-sm text-black">
+                            {c.name || "Аноним"}
+                          </span>
+                          <span className="text-xs text-gray-400">
+                            {formatDate(c.createdAt)}
+                          </span>
+                        </div>
+                        <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
+                          {c.text}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => deleteComment(c._id)}
+                        title="Удалить комментарий"
+                        className="text-red-400 hover:text-red-600 transition-colors text-lg leading-none flex-shrink-0 cursor-pointer"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
+            <div className="px-6 py-3 border-t border-gray-200 bg-gray-50 text-xs text-gray-400">
+              Всего комментариев: {comments.length}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
