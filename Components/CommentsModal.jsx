@@ -26,15 +26,19 @@ function CommentsModal({ blogId, onClose, onCountChange }) {
     try {
       const res = await axios.get(`/api/blog/comments?blogId=${blogId}`);
       if (res.data.success) {
-        setComments(res.data.comments);
-        onCountChange?.(res.data.comments.length);
+        setComments((prev) => {
+          if (prev.length !== res.data.comments.length) {
+            onCountChange?.(res.data.comments.length);
+          }
+          return res.data.comments;
+        });
       }
     } catch {
       // тихо игнорируем
     } finally {
       setLoading(false);
     }
-  }, [blogId]);
+  }, [blogId, onCountChange]);
 
   useEffect(() => {
     fetchComments();
@@ -49,21 +53,14 @@ function CommentsModal({ blogId, onClose, onCountChange }) {
 
   // Блокировка скролла фона
   useEffect(() => {
-    const scrollY = window.scrollY;
     const scrollbarWidth =
       window.innerWidth - document.documentElement.clientWidth;
-
-    document.body.style.position = "fixed";
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.width = "100%";
+    document.body.style.overflow = "hidden";
     document.body.style.paddingRight = `${scrollbarWidth}px`;
 
     return () => {
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.width = "";
+      document.body.style.overflow = "";
       document.body.style.paddingRight = "";
-      window.scrollTo(0, scrollY);
     };
   }, []);
 
@@ -103,7 +100,7 @@ function CommentsModal({ blogId, onClose, onCountChange }) {
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       {/* Modal */}
-      <div className="bg-white w-full max-w-lg max-h-[90vh] flex flex-col shadow-2xl border border-black">
+      <div className="bg-white w-full max-w-lg h-[90vh] flex flex-col shadow-2xl border border-black overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-black">
           <h2 className="text-lg font-semibold uppercase tracking-wide">

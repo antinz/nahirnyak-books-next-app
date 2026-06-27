@@ -1,8 +1,30 @@
-"use client";
-
 import Image from "next/image";
-import { assets } from "../../Assets/assets";
 import Link from "next/link";
+import { assets } from "../../Assets/assets";
+
+export const metadata = {
+  title: "Об авторе — Нагирняк Михаил Павлович",
+  description:
+    "Михаил Павлович Нагирняк — пресвитер, пастор церкви евангельских христиан-баптистов, магистр церковного служения. Автор христианских книг и проповедей.",
+  alternates: {
+    canonical: "https://mihailnahirniak.blog/author",
+  },
+  openGraph: {
+    title: "Об авторе — Нагирняк Михаил Павлович",
+    description:
+      "Пастор церкви евангельских христиан-баптистов, автор христианских книг.",
+    url: "https://mihailnahirniak.blog/author",
+    type: "profile",
+    images: [
+      {
+        url: "/author_image.png",
+        width: 300,
+        height: 300,
+        alt: "Нагирняк Михаил Павлович",
+      },
+    ],
+  },
+};
 
 export default function AboutAuthor() {
   return (
@@ -32,6 +54,7 @@ export default function AboutAuthor() {
         />
 
         <div className="max-w-2xl leading-relaxed text-sm sm:text-base lg:text-lg">
+          <h1 className="text-2xl font-bold mb-4">Нагирняк Михаил Павлович</h1>
           <p>
             <strong>Нагирняк Михаил Павлович</strong>, пресвитер, пастор церкви
             евангельских христиан-баптистов. Начинал свое пасторское служение в
